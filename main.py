@@ -14,6 +14,12 @@ root.title('parking management')
 # bg = ImageTk.PhotoImage(Image.open('IMG_5570.JPG'))
 # Label(image=bg).grid(row=0,column=0)
 
+checkvar = IntVar()
+def check():
+    if checkvar.get()==1:
+        password.config(show='')
+    else:
+        password.config(show='*')
 def submit():
     user = username.get()
     passw = password.get()
@@ -41,6 +47,8 @@ username.place(x=220,y=10)
 Label(frame,text='password').place(x=150,y=28)
 password = Entry(frame,textvariable=StringVar)
 password.place(x=220,y=28)
+c = Checkbutton(frame,text='show password',variable=checkvar,onvalue=1,offvalue=0,height=1,width=20,command=check)
+c.place(x=200,y=50)
 
 Button(frame,text='Login',command=submit).place(x=190,y=70)
 Label(frame,text="Don't have an account?").place(x=150,y=100)

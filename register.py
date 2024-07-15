@@ -3,10 +3,11 @@ from tkinter import messagebox
 import database
 
 root = Tk()
-root.geometry('1920x1080')
+root.geometry('1920x880')
 # root.maxsize(width = 1500 , height=900)
 # root.minsize(width=1500 , height=900)
 root.title('parking management')
+
 
 def register_user():
     database.create_table()
@@ -20,19 +21,52 @@ def register_user():
     messagebox.showinfo('success','registered succesfully')
     import main
     
+def phone():
+        valid = NONE
+        len_phone=phone_number.get()
+
+        def check_isdigit():
+            nonlocal len_phone
+
+            for i in len_phone:
+                if i.isdigit():
+                    valid = True
+                else:
+                    valid = False
+                    messagebox.showerror('error','phone number is supposed to be digit')
+
+                    break
+            return valid
+        
+        if check_isdigit()== True:
+            if len(len_phone)==10 and len(len_phone)!=0:
+                        con = database.makeconnection()
+                        cursor = con.cursor()
+                        cursor.execute("SELECT * FROM users Where phone=?",(phone_number.get(),))
+                        result = cursor.fetchall()
+                        if result==[]:
+                            return  True
+                        else:
+                            messagebox.showerror('error','phone number is already used')
+            else:
+                messagebox.showerror('error','phone number should be 10 digit')
+
 
 def check_details():
     user = username.get()
     passwa = passworda.get()
     passwb = passwordb.get()
-    if passwa == passwb:
-        if database.get_user(user,passwa):
-            messagebox.showerror('username','username already exists')
-        else:
-            register_user()
+    result = phone()
+    if result != True:
+        ...
     else:
-        messagebox.showerror('error','passwords do not match')
-    
+        if passwa == passwb:
+            if database.get_user(user,passwa):
+                messagebox.showerror('username','username already exists')
+            else:
+                register_user()
+        else:
+            messagebox.showerror('error','passwords do not match')
 
 
 Label(root,text='signup',font=("Regular",48)).place(x=692,y=80)
@@ -48,7 +82,7 @@ name = Entry(root,textvariable=StringVar)
 name.place(x=529,y=300)
 
 Label(root,text='phone',font=("Regular",30)).place(x=529,y=350)
-phone_number = Entry(root,textvariable=StringVar)
+phone_number = Entry(root,textvariable=IntVar)
 phone_number.place(x=529,y=400)
 
 Label(root,text='email',font=("Regular",30)).place(x=127,y=350)
@@ -62,7 +96,7 @@ passworda.place(x=159,y=500)
 Label(root,text='re-password',font=("Regular",20)).place(x=529,y=450)
 passwordb = Entry(root,textvariable=StringVar)
 passwordb.place(x=529,y=500)
-Button(root,text='CREATE ACCOUNT',command=check_details).place(x=127,y=700)
+Button(root,text='Create Account',command=check_details).place(x=127,y=700)
 
 
 root.mainloop()

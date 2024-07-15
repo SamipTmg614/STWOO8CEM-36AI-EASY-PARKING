@@ -45,7 +45,7 @@ username.place(x=220,y=10)
 
 
 Label(frame,text='password').place(x=150,y=28)
-password = Entry(frame,textvariable=StringVar)
+password = Entry(frame,textvariable=StringVar,show='*')
 password.place(x=220,y=28)
 c = Checkbutton(frame,text='show password',variable=checkvar,onvalue=1,offvalue=0,height=1,width=20,command=check)
 c.place(x=200,y=50)

@@ -3,9 +3,9 @@ from tkinter import messagebox
 import database
 
 root = Tk()
-root.geometry('500x500')
-root.maxsize(width = 500 , height=500)
-root.minsize(width=500 , height=500)
+root.geometry('1920x1080')
+# root.maxsize(width = 1500 , height=900)
+# root.minsize(width=1500 , height=900)
 root.title('parking management')
 
 def register_user():
@@ -35,32 +35,34 @@ def check_details():
     
 
 
-
-Label(root,text='username').place(x=150,y=10)
-username = Entry(root,textvariable=StringVar)
-username.place(x=220,y=10)
+Label(root,text='signup',font=("Regular",48)).place(x=692,y=80)
 
 
-Label(root,text='name').place(x=150,y=30)
+Label(root,text='username',font=("Regular",30)).place(x=127,y=250)
+username = Entry(root,textvariable=StringVar,highlightbackground='black')
+username.place(x=159,y=300)
+
+
+Label(root,text='name',font=("Regular",30)).place(x=529,y=250)
 name = Entry(root,textvariable=StringVar)
-name.place(x=220,y=30)
+name.place(x=529,y=300)
 
-Label(root,text='phone').place(x=150,y=50)
+Label(root,text='phone',font=("Regular",30)).place(x=529,y=350)
 phone_number = Entry(root,textvariable=StringVar)
-phone_number.place(x=220,y=50)
+phone_number.place(x=529,y=400)
 
-Label(root,text='email').place(x=150,y=70)
+Label(root,text='email',font=("Regular",30)).place(x=127,y=350)
 email_id = Entry(root,textvariable=StringVar)
-email_id.place(x=220,y=70)
+email_id.place(x=159,y=400)
 
-Label(root,text='password').place(x=150,y=90)
+Label(root,text='password',font=("Regular",30)).place(x=127,y=450)
 passworda = Entry(root,textvariable=StringVar)
-passworda.place(x=220,y=90)
+passworda.place(x=159,y=500)
 
-Label(root,text='re-password').place(x=150,y=110)
+Label(root,text='re-password',font=("Regular",20)).place(x=529,y=450)
 passwordb = Entry(root,textvariable=StringVar)
-passwordb.place(x=220,y=110)
-Button(root,text='signup',command=check_details).place(x=190,y=130)
+passwordb.place(x=529,y=500)
+Button(root,text='CREATE ACCOUNT',command=check_details).place(x=127,y=700)
 
 
 root.mainloop()

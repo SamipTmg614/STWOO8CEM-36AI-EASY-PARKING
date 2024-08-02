@@ -32,7 +32,7 @@ def availability_table():
              ('10','TRUE'),('11','TRUE'),('12','TRUE'),('13','TRUE'),('14','TRUE'),('15','TRUE'),('16','TRUE'),('17','TRUE'),('18','TRUE'),
              ('19','TRUE'),('20','TRUE'),('21','TRUE'),('22','TRUE'),('23','TRUE'),('24','TRUE'),('25','TRUE'),('26','TRUE'),('27','TRUE'),
              ('28','TRUE'),('29','TRUE'),('30','TRUE'),('31','TRUE'),('32','TRUE')]
-        c.execute("CREATE TABLE availability(id TEXT PRIMARY KEY NOT NULL,status TEXT NOT NULL)")
+        c.execute("CREATE TABLE availability(id TEXT PRIMARY KEY NOT NULL,status TEXT NOT NULL,model TEXT,number TEXT)")
         print("A")
         c.executemany("INSERT INTO availability(id,status) VALUES(?,?)",lst)
 

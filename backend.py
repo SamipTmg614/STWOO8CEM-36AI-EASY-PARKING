@@ -4,47 +4,72 @@ import database
 root=Tk()
 root.geometry("1920x880")
 
+
+
+def green(button,x):
+    conn=database.makeconnection()
+    c=conn.cursor()
+    button.config(text="available",bg="green")
+    c.execute(f'''UPDATE availability
+                    SET status=?,model=NULL,number=NULL
+                    WHERE id=? 
+                  ''',("TRUE",x))
+    conn.commit()
+    conn.close()
+    
 #Function to change the button colour and text
 def red(button,x):
-        conn=database.makeconnection()
-        c=conn.cursor()
-        button.config(text="booked",bg="red")
-        print("yo")
-        c.execute(f'''UPDATE availability
-                    SET status=?
+    conn=database.makeconnection()
+    c=conn.cursor()
+    button.config(text="booked",bg="red")
+    model=model_var.get()
+    number=number_var.get()
+
+    c.execute(f'''UPDATE availability
+                    SET status=?,model=?,number=?
                     WHERE id=? 
-                ''',("FALSE",x))
-        conn.commit()
-        conn.close()
+                ''',("FALSE",model,number,x))
         
-
-
-    
+    conn.commit()
+    conn.close()
+   
 def check_availability(button,x):
     conn=database.makeconnection()
     c=conn.cursor()
 
-    #Code to change the colur and text of the button according to the status
+    #Code to change the colour and text of the button according to the status
     c.execute("SELECT status from availability WHERE id=?",(x,))
     status=c.fetchone()
     if status[0]=="FALSE":
-        button.config(text="available",bg="green")
-        c.execute(f'''UPDATE availability
-                    SET status=?
-                    WHERE id=? 
-                  ''',("TRUE",x))
+        win=Toplevel()
+        win.geometry("300x300")
+        c.execute("SELECT model,number FROM availability WHERE id=?",x)
+        details=c.fetchmany()
+
+        detail_label=Label(win,text="Details")
+        detail_label.place(x=65,y=0)
+        model_label=Label(win,text=f"Model:{details[0][0]}")
+        model_label.place(x=0,y=20)
+        number_label=Label(win,text=f"Number:{details[0][1]}")
+        number_label.place(x=0,y=40)
+        time_label=Label(win,text="Entry Time:")
+        time_label.place(x=0,y=60)
+
+        confirm=Button(win,text="Confirm",command=lambda:[green(button,x),win.destroy()])
+        confirm.place(x=65,y=80)
+        win.mainloop()
     else:
-        win=Tk()
+        win=Toplevel()
         win.geometry("300x300")
 
-
+        global model_var
         model_var=StringVar()
         model_label=Label(win,text="Model")
         model_label.place(x=10,y=10)
         model_entry=Entry(win,textvariable=model_var)
         model_entry.place(x=60,y=10)
 
-
+        global number_var
         number_var=StringVar()
         number_label=Label(win,text="Number")
         number_label.place(x=10,y=30)
@@ -56,7 +81,7 @@ def check_availability(button,x):
         time_label=Label(win,text=f"Time:  {time}")
         time_label.place(x=10,y=50)
 
-        submit=Button(win,text="Submit",command=lambda:[win.destroy(),red(button,x)])
+        submit=Button(win,text="Submit",command=lambda:[red(button,x),win.destroy()])
         submit.place(x=80,y=80)
 
         win.mainloop()
@@ -89,6 +114,7 @@ spaces.pack(side=RIGHT)
 lbl2=Label(spaces,text="Available Spaces",font=("courier",19,"bold"))
 lbl2.place(x=270)
 
+#32 Buttons for 32 spaces
 b1=Button(spaces,height=2,width=15,command=lambda:check_availability(b1,"1"))
 b1.place(x=20,y=120)
 

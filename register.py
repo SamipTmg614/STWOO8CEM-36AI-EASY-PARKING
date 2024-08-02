@@ -4,22 +4,20 @@ import database
 
 root = Tk()
 root.geometry('1920x880')
-# root.maxsize(width = 1500 , height=900)
-# root.minsize(width=1500 , height=900)
 root.title('parking management')
 
 
 def register_user():
-    database.create_table()
+    database.user_table()
     user= username.get()
     fullname = name.get()
     phone = phone_number.get()
     email = email_id.get()
     passw= passworda.get()
     database.add_user(user,fullname,phone,email,passw)
-    root.destroy()
     messagebox.showinfo('success','registered succesfully')
-    import main
+    root.destroy()
+    import customer_interface
     
 def phone():
         valid = NONE
@@ -34,16 +32,16 @@ def phone():
                 else:
                     valid = False
                     messagebox.showerror('error','phone number is supposed to be digit')
-
                     break
             return valid
         
         if check_isdigit()== True:
-            if len(len_phone)==10 and len(len_phone)!=0:
+            if len(len_phone)==10:
                         con = database.makeconnection()
                         cursor = con.cursor()
                         cursor.execute("SELECT * FROM users Where phone=?",(phone_number.get(),))
                         result = cursor.fetchall()
+
                         if result==[]:
                             return  True
                         else:
@@ -56,17 +54,17 @@ def check_details():
     user = username.get()
     passwa = passworda.get()
     passwb = passwordb.get()
-    result = phone()
-    if result != True:
-        ...
-    else:
+
+    if phone()==True:
         if passwa == passwb:
             if database.get_user(user,passwa):
                 messagebox.showerror('username','username already exists')
             else:
                 register_user()
+
         else:
             messagebox.showerror('error','passwords do not match')
+
 
 
 Label(root,text='signup',font=("Regular",48)).place(x=692,y=80)
@@ -98,6 +96,4 @@ passwordb = Entry(root,textvariable=StringVar)
 passwordb.place(x=529,y=500)
 Button(root,text='Create Account',command=check_details).place(x=127,y=700)
 
-
 root.mainloop()
-

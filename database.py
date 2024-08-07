@@ -22,27 +22,45 @@ def manager_table():
         c.execute('''CREATE TABLE IF NOT EXISTS managers(
                 id TEXT NOT NULL,
                 password TEXT NOT NULL)''')
-        print("run")
+
         c.execute('''INSERT INTO managers(id,password) VALUES(?,?)
                   ''',("admin","admin@123"))
     conn.commit()
     conn.close()
 
+def location_map():
+    conn=makeconnection()
+    c=conn.cursor()
+
+    try:
+        c.execute("SELCT * FROM location_map)")
+
+    except:
+        c.execute(f"CREATE TABLE IF NOT EXISTS location_map(id TEXT NOT NULL,name TEXT)")
+        lst=[("Location_1","ADD"),("Location_2","ADD"),("Location_3","ADD"),("Location_4","ADD")
+             ,("Location_5","ADD"),("Location_6","ADD"),("Location_7","ADD"),("Location_8","ADD")
+             ,("Location_9","ADD"),("Location_10","ADD"),("Location_11","ADD"),("Location_12","ADD")]
+        c.executemany(f"INSERT INTO location_map(id,name) VALUES(?,?)",lst)
+        conn.commit()
+        conn.close()
+
+
 def location_table(location):
     conn=makeconnection()
     c=conn.cursor()
+
     try:
+
         c.execute(f"SELECT * FROM {location}")
 
     except :
-        lst=[('1','TRUE'),('2','TRUE'),('3','TRUE'),('4','TRUE'),('5','TRUE'),('6','TRUE'),('7','TRUE'),('8','TRUE'),('9','TRUE'),
-             ('10','TRUE'),('11','TRUE'),('12','TRUE'),('13','TRUE'),('14','TRUE'),('15','TRUE'),('16','TRUE'),('17','TRUE'),('18','TRUE'),
-             ('19','TRUE'),('20','TRUE'),('21','TRUE'),('22','TRUE'),('23','TRUE'),('24','TRUE'),('25','TRUE'),('26','TRUE'),('27','TRUE'),
-             ('28','TRUE'),('29','TRUE'),('30','TRUE'),('31','TRUE'),('32','TRUE')]
-        c.execute(f"CREATE TABLE {location}(id TEXT PRIMARY KEY NOT NULL,status TEXT NOT NULL,model TEXT,number TEXT)")
+        lst=[('1','ADD'),('2','ADD'),('3','ADD'),('4','ADD'),('5','ADD'),('6','ADD'),('7','ADD'),('8','ADD'),('9','ADD'),
+             ('10','ADD'),('11','ADD'),('12','ADD'),('13','ADD'),('14','ADD'),('15','ADD'),('16','ADD'),('17','ADD'),('18','ADD'),
+             ('19','ADD'),('20','ADD'),('21','ADD'),('22','ADD'),('23','ADD'),('24','ADD'),('25','ADD'),('26','ADD'),('27','ADD'),
+             ('28','ADD'),('29','ADD'),('30','ADD'),('31','ADD'),('32','ADD')]
+        c.execute(f"CREATE TABLE IF NOT EXISTS {location}(id TEXT PRIMARY KEY NOT NULL,status TEXT NOT NULL,model TEXT,number TEXT)")
         c.executemany(f"INSERT INTO {location}(id,status) VALUES(?,?)",lst)
-
-    conn.commit()
+        conn.commit()
     conn.close()
 
 def get_user(username,password):

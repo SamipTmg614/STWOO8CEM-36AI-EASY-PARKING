@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 import database
+import re
 
 root = Tk()
 root.geometry('1920x880')
@@ -81,6 +82,16 @@ def phone():
                 messagebox.showerror('error','phone number should be 10 digit')
 
 
+def check_email():
+    email = email_id.get()
+    email_pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+    if not re.match(email_pattern, email):
+        messagebox.showerror('Please enter a valid email address.')
+        return False
+    return True
+
+
+
 def check_details():
     database.user_table()
     user = username.get()
@@ -88,17 +99,18 @@ def check_details():
     passwb = passwordb.get()
 
     if phone()==True:
-        if passwa==passwb:
-            if check_password() == True:
-                if database.get_user(user,passwa):
-                    messagebox.showerror('username','username already exists')
+        if check_email()==True:
+            if passwa==passwb:
+                if check_password() == True:
+                    if database.get_user(user,passwa):
+                        messagebox.showerror('username','username already exists')
+                    else:
+                        register_user()
                 else:
-                    register_user()
-            else:
-                print("error at 97")
+                    print("error at 97")
 
-        else:
-            messagebox.showerror('error','passwords do not match')
+            else:
+                messagebox.showerror('error','passwords do not match')
 
 
 

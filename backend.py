@@ -1,10 +1,11 @@
 from tkinter import *
+from tkinter import messagebox
 import datetime
 import database
 root=Tk()
 root.geometry("1920x880")
 
-spaces=None
+
 #Function to change button colour and set values NULL again
 def green(button,x,location):
     conn=database.makeconnection()
@@ -60,7 +61,7 @@ def check_slot(button,x,location):
         confirm=Button(win,text="Confirm",command=lambda:[green(button,x,location),win.destroy()])
         confirm.place(x=65,y=80)
         win.mainloop()
-    else:
+    elif status[0]=="TRUE":
         win=Toplevel()
         win.geometry("300x300")
 
@@ -88,6 +89,16 @@ def check_slot(button,x,location):
 
         win.mainloop()
 
+    elif status[0]=="ADD":
+        response=messagebox.askyesno("Confirm","Do you want to add a slot?")
+        if response==1:
+            button.config(text="available",bg="green")
+            c.execute(f'''UPDATE {location}
+                    SET status=?
+                    WHERE id=? 
+                ''',("TRUE",x))
+            
+    conn.commit()       
     conn.close()
 
 #Determines colour of the button according to status in database
@@ -102,6 +113,8 @@ def button_status(button,x,location):
     elif status[0]=="FALSE":
         button.config(text="booked",bg="red") 
 
+    elif status[0]=="ADD":
+        button.config(text="Add",bg="Yellow")
     conn.commit()
     conn.close() 
 
@@ -112,12 +125,44 @@ logo.pack(fill=X)
 lbl1=Label(logo,text="test")
 lbl1.pack()
 
-def create_button(location):
+def ask_location(button,name_id):
+    conn=database.makeconnection()
+    c=conn.cursor()
+    c.execute(f"SELECT name FROM location_map WHERE id=?",(name_id,))
+    given_name=c.fetchone()
+
+    if given_name[0]=="ADD":
+        response=messagebox.askyesno("Confirm","Do you want to add a location?")
+        if response==1:
+            win=Toplevel()
+            win.geometry("300x300")
+            location_var=StringVar()
+            location_name=Entry(win,textvariable=location_var)
+            location_name.pack()
+            confirm_btn=Button(win,text="Confirm",command=lambda:on_confirm())
+            def on_confirm():
+                c.execute('''UPDATE location_map
+                            SET name=?
+                            WHERE id=?''',(location_var.get(),name_id))
+                conn.commit()
+                conn.close()
+                button.config(text=location_var.get())
+                create_button(name_id)
+                win.destroy()
+            confirm_btn.pack()
+            win.mainloop()
+    else:
+        create_button(name_id)
+        conn.close()
+
+def create_button(name_id):
     global spaces
+
     try:
         spaces.destroy()
     except:
         ...
+    location=name_id
     database.location_table(location)
     spaces=Frame(root,width=700,height=880,borderwidth=4,relief=GROOVE)
     spaces.pack(side=RIGHT)
@@ -236,40 +281,45 @@ def create_button(location):
 locations=Frame(root,width=900,height=880,relief=GROOVE,borderwidth=4)
 locations.pack(side=LEFT)
 
-btn=Button(locations,text="Location  1",height=5,width=30,background="red",command=lambda:create_button("Location_1"))
-btn.place(x=30,y=120)
+database.location_map()
+conn=database.makeconnection()
+c=conn.cursor()
+c.execute("SELECT name FROM location_map")
+location=c.fetchall()
+btn1=Button(locations,text=location[0],height=5,width=30,background="red",command=lambda:ask_location(btn1,"Location_1"))
+btn1.place(x=30,y=120)
 
-btn1=Button(locations,text="Location 2",height=5,width=30,background="red",command=lambda:create_button("Location_2"))
-btn1.place(x=300,y=120)
+btn2=Button(locations,text=location[1],height=5,width=30,background="red",command=lambda:ask_location(btn2,"Location_2"))
+btn2.place(x=300,y=120)
 
-btn3=Button(locations,text="Location 3",height=5,width=30,background="red",command=lambda:create_button("Location_3"))
+btn3=Button(locations,text=location[2],height=5,width=30,background="red",command=lambda:ask_location(btn3,"Location_3"))
 btn3.place(x=570,y=120)
 
-btn4=Button(locations,text="Location 4",height=5,width=30,background="red",command=lambda:create_button("Location_4"))
+btn4=Button(locations,text=location[3],height=5,width=30,background="red",command=lambda:ask_location(btn4,"Location_4"))
 btn4.place(x=30,y=250)
 
-btn5=Button(locations,text="Location 5",height=5,width=30,background="red",command=lambda:create_button("Location_5"))
+btn5=Button(locations,text=location[4],height=5,width=30,background="red",command=lambda:ask_location(btn5,"Location_5"))
 btn5.place(x=300,y=250)
 
-btn6=Button(locations,text="Location 6",height=5,width=30,background="red",command=lambda:create_button("Location_6"))
+btn6=Button(locations,text=location[5],height=5,width=30,background="red",command=lambda:ask_location(btn6,"Location_6"))
 btn6.place(x=570,y=250)
 
-btn7=Button(locations,text="Location 4",height=5,width=30,background="red",command=lambda:create_button("Location_7"))
+btn7=Button(locations,text=location[6],height=5,width=30,background="red",command=lambda:ask_location(btn7,"Location_7"))
 btn7.place(x=30,y=380)
 
-btn8=Button(locations,text="Location 8",height=5,width=30,background="red",command=lambda:create_button("Location_8"))
+btn8=Button(locations,text=location[7],height=5,width=30,background="red",command=lambda:ask_location(btn8,"Location_8"))
 btn8.place(x=300,y=380)
 
-btn9=Button(locations,text="Location 9",height=5,width=30,background="red",command=lambda:create_button("Location_9"))
+btn9=Button(locations,text=location[8],height=5,width=30,background="red",command=lambda:ask_location(btn9,"Location_9"))
 btn9.place(x=570,y=380)
 
-btn10=Button(locations,text="Location 10",height=5,width=30,background="red",command=lambda:create_button("Location_10"))
+btn10=Button(locations,text=location[9],height=5,width=30,background="red",command=lambda:ask_location(btn10,"Location_10"))
 btn10.place(x=30,y=510)
 
-btn11=Button(locations,text="Location 11",height=5,width=30,background="red",command=lambda:create_button("Location_11"))
+btn11=Button(locations,text=location[10],height=5,width=30,background="red",command=lambda:ask_location(btn11,"Location_11"))
 btn11.place(x=300,y=510)
 
-btn12=Button(locations,text="Location 12",height=5,width=30,background="red",command=lambda:create_button("Location_12"))
+btn12=Button(locations,text=location[11],height=5,width=30,background="red",command=lambda:ask_location(btn12,"Location_12"))
 btn12.place(x=570,y=510)
 
 lbl3=Label(locations,text="Locations",font=("courier",19,"bold"))

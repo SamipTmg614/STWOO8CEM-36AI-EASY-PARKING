@@ -17,8 +17,39 @@ def register_user():
     database.add_user(user,fullname,phone,email,passw)
     messagebox.showinfo('success','registered succesfully')
     root.destroy()
-    import customer_interface
+    import new_main
+
+def check_password():
+    passw = False
+    pa = passworda.get()
+    pb = passwordb.get()
+
+    # Check if passwords match
+    if pa != pb:
+        messagebox.showerror('error', 'Passwords do not match')
+
+    has_digit = False
+    has_upper = False
+    has_alphabet = False
+
+    if len(pa) >= 8:  #conditions for password to be valid
+        for i in pa:
+            if i.isdigit():
+                has_digit = True
+            if i.isalpha():
+                has_alphabet = True
+            if i.isupper():
+                has_upper = True
+
+        if has_digit and has_upper and has_alphabet:
+            passw = True
+        else:
+            messagebox.showerror('error', 'Password must contain at least 1 digit, 1 uppercase letter, and alphabet')
+    else:
+        messagebox.showerror('error', 'Password must be at least 8 characters long')
+    return passw
     
+
 def phone():
         valid = NONE
         len_phone=phone_number.get()
@@ -51,16 +82,20 @@ def phone():
 
 
 def check_details():
+    database.user_table()
     user = username.get()
     passwa = passworda.get()
     passwb = passwordb.get()
 
     if phone()==True:
-        if passwa == passwb:
-            if database.get_user(user,passwa):
-                messagebox.showerror('username','username already exists')
+        if passwa==passwb:
+            if check_password() == True:
+                if database.get_user(user,passwa):
+                    messagebox.showerror('username','username already exists')
+                else:
+                    register_user()
             else:
-                register_user()
+                print("error at 97")
 
         else:
             messagebox.showerror('error','passwords do not match')

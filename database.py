@@ -33,7 +33,7 @@ def location_map():
     c=conn.cursor()
 
     try:
-        c.execute("SELCT * FROM location_map)")
+        c.execute("SELECT * FROM location_map")
 
     except:
         c.execute(f"CREATE TABLE IF NOT EXISTS location_map(id TEXT NOT NULL,name TEXT)")

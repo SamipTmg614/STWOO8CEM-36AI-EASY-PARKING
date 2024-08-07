@@ -292,34 +292,34 @@ btn1.place(x=30,y=120)
 btn2=Button(locations,text=location[1],height=5,width=30,background="red",command=lambda:ask_location(btn2,"Location_2"))
 btn2.place(x=300,y=120)
 
-btn3=Button(locations,text=location[2],height=5,width=30,background="red",command=lambda:create_button("Location_3"))
+btn3=Button(locations,text=location[2],height=5,width=30,background="red",command=lambda:ask_location(btn3,"Location_3"))
 btn3.place(x=570,y=120)
 
-btn4=Button(locations,text=location[3],height=5,width=30,background="red",command=lambda:create_button("Location_4"))
+btn4=Button(locations,text=location[3],height=5,width=30,background="red",command=lambda:ask_location(btn4,"Location_4"))
 btn4.place(x=30,y=250)
 
-btn5=Button(locations,text=location[4],height=5,width=30,background="red",command=lambda:create_button("Location_5"))
+btn5=Button(locations,text=location[4],height=5,width=30,background="red",command=lambda:ask_location(btn5,"Location_5"))
 btn5.place(x=300,y=250)
 
-btn6=Button(locations,text=location[5],height=5,width=30,background="red",command=lambda:create_button("Location_6"))
+btn6=Button(locations,text=location[5],height=5,width=30,background="red",command=lambda:ask_location(btn6,"Location_6"))
 btn6.place(x=570,y=250)
 
-btn7=Button(locations,text=location[6],height=5,width=30,background="red",command=lambda:create_button("Location_7"))
+btn7=Button(locations,text=location[6],height=5,width=30,background="red",command=lambda:ask_location(btn7,"Location_7"))
 btn7.place(x=30,y=380)
 
-btn8=Button(locations,text=location[7],height=5,width=30,background="red",command=lambda:create_button("Location_8"))
+btn8=Button(locations,text=location[7],height=5,width=30,background="red",command=lambda:ask_location(btn8,"Location_8"))
 btn8.place(x=300,y=380)
 
-btn9=Button(locations,text=location[8],height=5,width=30,background="red",command=lambda:create_button("Location_9"))
+btn9=Button(locations,text=location[8],height=5,width=30,background="red",command=lambda:ask_location(btn9,"Location_9"))
 btn9.place(x=570,y=380)
 
-btn10=Button(locations,text=location[9],height=5,width=30,background="red",command=lambda:create_button("Location_10"))
+btn10=Button(locations,text=location[9],height=5,width=30,background="red",command=lambda:ask_location(btn10,"Location_10"))
 btn10.place(x=30,y=510)
 
-btn11=Button(locations,text=location[10],height=5,width=30,background="red",command=lambda:create_button("Location_11"))
+btn11=Button(locations,text=location[10],height=5,width=30,background="red",command=lambda:ask_location(btn11,"Location_11"))
 btn11.place(x=300,y=510)
 
-btn12=Button(locations,text=location[11],height=5,width=30,background="red",command=lambda:create_button("Location_12"))
+btn12=Button(locations,text=location[11],height=5,width=30,background="red",command=lambda:ask_location(btn12,"Location_12"))
 btn12.place(x=570,y=510)
 
 lbl3=Label(locations,text="Locations",font=("courier",19,"bold"))

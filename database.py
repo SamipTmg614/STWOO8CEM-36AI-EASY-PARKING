@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import *
 
 result=None
 def makeconnection():
@@ -58,7 +59,8 @@ def location_table(location):
              ('10','ADD'),('11','ADD'),('12','ADD'),('13','ADD'),('14','ADD'),('15','ADD'),('16','ADD'),('17','ADD'),('18','ADD'),
              ('19','ADD'),('20','ADD'),('21','ADD'),('22','ADD'),('23','ADD'),('24','ADD'),('25','ADD'),('26','ADD'),('27','ADD'),
              ('28','ADD'),('29','ADD'),('30','ADD'),('31','ADD'),('32','ADD')]
-        c.execute(f"CREATE TABLE IF NOT EXISTS {location}(id TEXT PRIMARY KEY NOT NULL,status TEXT NOT NULL,model TEXT,number TEXT)")
+        c.execute(f'''CREATE TABLE IF NOT EXISTS {location}(id TEXT PRIMARY KEY NOT NULL,status TEXT NOT NULL,model TEXT,number TEXT,
+                  minute INTEGER,hour INTEGER,year INTEGER,month INTEGER,day INTEGER)''')
         c.executemany(f"INSERT INTO {location}(id,status) VALUES(?,?)",lst)
         conn.commit()
     conn.close()
@@ -85,4 +87,33 @@ def add_user(username,name,phone,email,password):
 
     conn.commit()
     conn.close()
+
+def add_manager(id,password):
+    conn = makeconnection()
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO managers VALUES(?,?)",(id,password))
+
+    conn.commit()
+    conn.close()
+
+def calculate_time(id,location):
+    conn=makeconnection()
+    c=conn.cursor()
+    c.execute(f"SELECT year FROM {location} WHERE id=?",(id,))
+    year=c.fetchone()
+    c.execute(f"SELECT month FROM {location} WHERE id=?",(id,))
+    month=c.fetchone()
+    c.execute(f"SELECT day FROM {location} WHERE id=?",(id,))
+    day=c.fetchone()
+    c.execute(f"SELECT hour FROM {location} WHERE id=?",(id,))
+    hour=c.fetchone()
+    c.execute(f"SELECT minute FROM {location} WHERE id=?",(id,))
+    minute=c.fetchone()
+    current_time=datetime.now()
+    entry_time=datetime(year[0],month[0],day[0],hour[0],minute[0])
+    difference=current_time-entry_time
+    total_minutes=int(difference.total_seconds()/60)
+    conn.close()
+    return total_minutes
+
 

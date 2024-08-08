@@ -1,5 +1,6 @@
 import sqlite3
-import datetime
+from datetime import *
+
 result=None
 def makeconnection():
     conn = sqlite3.connect('database.db')
@@ -58,7 +59,8 @@ def location_table(location):
              ('10','ADD'),('11','ADD'),('12','ADD'),('13','ADD'),('14','ADD'),('15','ADD'),('16','ADD'),('17','ADD'),('18','ADD'),
              ('19','ADD'),('20','ADD'),('21','ADD'),('22','ADD'),('23','ADD'),('24','ADD'),('25','ADD'),('26','ADD'),('27','ADD'),
              ('28','ADD'),('29','ADD'),('30','ADD'),('31','ADD'),('32','ADD')]
-        c.execute(f"CREATE TABLE IF NOT EXISTS {location}(id TEXT PRIMARY KEY NOT NULL,status TEXT NOT NULL,model TEXT,number TEXT)")
+        c.execute(f'''CREATE TABLE IF NOT EXISTS {location}(id TEXT PRIMARY KEY NOT NULL,status TEXT NOT NULL,model TEXT,number TEXT,
+                  minute INTEGER,hour INTEGER,year INTEGER,month INTEGER,day INTEGER)''')
         c.executemany(f"INSERT INTO {location}(id,status) VALUES(?,?)",lst)
         conn.commit()
     conn.close()
@@ -85,7 +87,6 @@ def add_user(username,name,phone,email,password):
 
     conn.commit()
     conn.close()
-
 
 def add_manager(id,password):
     conn = makeconnection()
@@ -114,4 +115,5 @@ def calculate_time(id,location):
     total_minutes=int(difference.total_seconds()/60)
     conn.close()
     return total_minutes
+
 

@@ -36,6 +36,7 @@ def red(button,x,location):
    
 #Function to check if the slot is available or not
 def check_slot(button,x,location):
+    print(button)
     database.location_table(location)
     conn=database.makeconnection()
     c=conn.cursor()
@@ -105,7 +106,7 @@ def check_slot(button,x,location):
 
         conn.commit()
         conn.close()
-        submit=Button(win,text="Submit",command=lambda:[red(button,x,location),win.destroy()])
+        submit=Button(win,text="submit",command=lambda:[red(button,x,location),win.destroy()])
         submit.place(x=80,y=80)
         win.mainloop()
 
@@ -179,12 +180,18 @@ def register_manager():
     Button(frame,text='Sign up',command=enter_manager).place(x=190,y=130)
     win.mainloop()
     
-
+def logout_manager():
+    response=messagebox.askyesno("Confirm","Do you want to logout?")
+    if response==1:    
+        root.destroy()
+        import new_main
 #Frame for logo
-logo=Frame(root,bg="blue",width=30,height=50,borderwidth=4)
+logo=Frame(root,bg="grey",width=30,height=50,borderwidth=4)
 logo.pack(fill=X)
-add_manager=Button(text="Add Manager",bg="purple",command=register_manager)
+add_manager=Button(text="Add Manager",bg="green",command=register_manager)
 add_manager.place(x=1400,y=13)
+logout=Button(text="Logout",bg="green",command=logout_manager)
+logout.place(x=1350,y=13)
 lbl1=Label(logo,text="test")
 lbl1.place(x=600,y=10)
 
@@ -199,10 +206,10 @@ def ask_location(button,name_id):
         if response==1:
             win=Toplevel()
             win.geometry("300x300")
+            Label(win,text='enter location name').pack()
             location_var=StringVar()
             location_name=Entry(win,textvariable=location_var)
             location_name.pack()
-            confirm_btn=Button(win,text="Confirm",command=lambda:on_confirm())
             def on_confirm():
                 c.execute('''UPDATE location_map
                             SET name=?
@@ -212,6 +219,7 @@ def ask_location(button,name_id):
                 button.config(text=location_var.get())
                 create_button(name_id)
                 win.destroy()
+            confirm_btn=Button(win,text="remove",command=lambda:on_confirm())
             confirm_btn.pack()
             win.mainloop()
     else:

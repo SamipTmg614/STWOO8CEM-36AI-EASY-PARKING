@@ -55,12 +55,23 @@ def check_slot(button,x,location):
         model_label.place(x=0,y=20)
         number_label=Label(win,text=f"Number:{details[0][1]}")
         number_label.place(x=0,y=40)
-        time_label=Label(win,text="Entry Time:")
+
+        c.execute(f"SELECT minute FROM {location} WHERE id=?",(x,))
+        minute=c.fetchone()
+        c.execute(f"SELECT hour FROM {location} WHERE id=?",(x,))
+        hour=c.fetchone()
+
+        time=database.calculate_time(x,location)
+
+        time_label=Label(win,text=f"Entry Time:{hour[0]}:{minute[0]}")
+        print(time)
         time_label.place(x=0,y=60)
 
+        conn.close()
         confirm=Button(win,text="Confirm",command=lambda:[green(button,x,location),win.destroy()])
         confirm.place(x=65,y=80)
         win.mainloop()
+
     elif status[0]=="TRUE":
         win=Toplevel()
         win.geometry("300x300")
@@ -80,13 +91,22 @@ def check_slot(button,x,location):
         number_entry.place(x=60,y=30)
 
         t=datetime.datetime.now()
-        time=str(t.hour)+":"+str(t.minute)
-        time_label=Label(win,text=f"Time:  {time}")
+        year=t.year
+        month=t.month
+        minute=t.minute
+        hour=t.hour
+        day=t.day
+        c.execute(f'''UPDATE {location}
+                      SET hour=?, minute=?,year=?,month=?,day=?
+                      WHERE id=?''',(hour,minute,year,month,day,x))
+        time=str(hour)+":"+str(minute)
+        time_label=Label(win,text=f"Time:{time}")
         time_label.place(x=10,y=50)
 
+        conn.commit()
+        conn.close()
         submit=Button(win,text="Submit",command=lambda:[red(button,x,location),win.destroy()])
         submit.place(x=80,y=80)
-
         win.mainloop()
 
     elif status[0]=="ADD":
@@ -97,9 +117,9 @@ def check_slot(button,x,location):
                     SET status=?
                     WHERE id=? 
                 ''',("TRUE",x))
-            
-    conn.commit()       
-    conn.close()
+            conn.commit()
+            conn.close()
+
 
 #Determines colour of the button according to status in database
 def button_status(button,x,location):
@@ -118,12 +138,55 @@ def button_status(button,x,location):
     conn.commit()
     conn.close() 
 
+def register_manager():
+    def enter_manager():
+        database.manager_table()
+        conn=database.makeconnection()
+        c=conn.cursor()
+        c.execute("SELECT id FROM managers")
+        manager_list=c.fetchall()
+
+        user=username.get()
+        passw=password.get()
+        conn.close()
+
+        exists="FALSE"
+        for i in manager_list:
+            if user==i[0]:
+                exists="TRUE"
+                break
+
+        if exists=="FALSE":
+            database.add_manager(user,passw)
+            messagebox.showinfo("Parking","New manager sucessfully added!")
+            win.destroy()
+        else:
+            messagebox.showinfo("Alert","Account Already exists")
+        
+    win=Toplevel()
+    win.geometry("500x500")
+    frame = Frame(win,highlightbackground="black",borderwidth=2,width=400,height=400)
+    frame.place(x=0,y=50)
+
+    Label(frame,text='Username').place(x=150,y=10)
+    username = Entry(frame,textvariable=StringVar)
+    username.place(x=220,y=10)
+
+    Label(frame,text='Password').place(x=150,y=28)
+    password = Entry(frame,textvariable=StringVar)
+    password.place(x=220,y=28)
+
+    Button(frame,text='Sign up',command=enter_manager).place(x=190,y=130)
+    win.mainloop()
+    
 
 #Frame for logo
-logo=Frame(root,bg="blue",width=30,height=150,borderwidth=15)
+logo=Frame(root,bg="blue",width=30,height=50,borderwidth=4)
 logo.pack(fill=X)
+add_manager=Button(text="Add Manager",bg="purple",command=register_manager)
+add_manager.place(x=1400,y=13)
 lbl1=Label(logo,text="test")
-lbl1.pack()
+lbl1.place(x=600,y=10)
 
 def ask_location(button,name_id):
     conn=database.makeconnection()

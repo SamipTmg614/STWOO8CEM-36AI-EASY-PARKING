@@ -178,6 +178,64 @@ def register_manager():
 
     Button(frame,text='Sign up',command=enter_manager).place(x=190,y=130)
     win.mainloop()
+
+
+def remove_manager():
+
+    def check_manager():
+        conn=database.makeconnection()
+        c=conn.cursor()
+        user=id.get()
+        passw=password.get()
+        c.execute("SELECT id from managers WHERE password=?",(passw,))
+        db_user=c.fetchone()
+        c.execute("SELECT password from managers WHERE id=?",(user,))
+        db_password=c.fetchone()
+        
+        if db_user==None or db_password==None:   
+            messagebox.showinfo("Alert","Username Not Found")
+        else:
+            database.delete_manager(user)
+            messagebox.showinfo("Success","Manager Removed")
+        conn.close()
+
+    win=Toplevel()
+    win.geometry("300x300")
+
+
+    def on_enter(e):
+        id.delete(0, 'end')
+    def on_leave(e):
+        name = id.get()
+        if name == '':
+            id.insert(0, 'Username')
+    
+    id_var=StringVar()
+    id=Entry(win,text="Id",textvariable=id_var)
+    id.pack()
+    id.insert(0,"Username")
+    id.bind('<FocusIn>', on_enter)
+    id.bind('<FocusOut>', on_leave)
+
+    def on_enter(e):
+        password.delete(0, 'end')
+    def on_leave(e):
+        name = password.get()
+        if name == '':
+            password.insert(0, 'Password')
+
+    password=StringVar()
+    password=Entry(win,textvariable=password)
+    password.pack()
+    password.insert(0,"Password")
+    password.bind('<FocusIn>', on_enter)
+    password.bind('<FocusOut>', on_leave)
+
+    confirm=Button(win,text='Confirm',command=check_manager)
+    confirm.pack()
+    
+
+    win.mainloop()
     
 
 #Frame for logo
@@ -185,6 +243,9 @@ logo=Frame(root,bg="blue",width=30,height=50,borderwidth=4)
 logo.pack(fill=X)
 add_manager=Button(text="Add Manager",bg="purple",command=register_manager)
 add_manager.place(x=1400,y=13)
+
+delete_manager=Button(text="Remove Manager",bg="purple",command=remove_manager)
+delete_manager.place(x=1270,y=13)
 lbl1=Label(logo,text="test")
 lbl1.place(x=600,y=10)
 

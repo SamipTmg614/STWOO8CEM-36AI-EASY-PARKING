@@ -116,4 +116,11 @@ def calculate_time(id,location):
     conn.close()
     return total_minutes
 
+def delete_manager(id):
+    conn=makeconnection()
+    c=conn.cursor()
+    c.execute('''DELETE FROM managers
+                WHERE id=?''',(id,))
+    conn.commit()
+    conn.close()
 

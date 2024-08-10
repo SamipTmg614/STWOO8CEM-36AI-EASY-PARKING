@@ -124,3 +124,28 @@ def delete_manager(id):
     conn.commit()
     conn.close()
 
+def fetch_code():
+    conn=makeconnection()
+    c=conn.cursor()
+    try:
+        c.execute("SELECT * FROM security_code")
+
+    except:
+        c.execute("CREATE TABLE IF NOT EXISTS security_code(passcode TEXT NOT NULL)")
+        c.execute("INSERT INTO security_code(passcode) VALUES(?)",("1234",))
+        conn.commit()
+
+    c.execute("SELECT passcode from security_code")
+    passcode=c.fetchone()
+    conn.close()
+    return passcode[0]
+
+def update_code(code):
+    conn=makeconnection()
+    c=conn.cursor()
+    current_code=fetch_code()
+    c.execute('''UPDATE security_code
+                SET passcode=?
+                WHERE passcode=?''',(code,current_code))
+    conn.commit()
+    conn.close()

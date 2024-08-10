@@ -110,7 +110,7 @@ def check_slot(button,x,location):
         win.mainloop()
 
     elif status[0]=="ADD":
-        response=messagebox.askyesno("Confirm","Do you want to add a slot?")
+        response=messagebox.askyesno("Confirm","Do you want to add a slot?",parent=win)
         if response==1:
             button.config(text="available",bg="green")
             c.execute(f'''UPDATE {location}
@@ -148,6 +148,7 @@ def register_manager():
 
         user=username.get()
         passw=password.get()
+        code=security.get()
         conn.close()
 
         exists="FALSE"
@@ -157,11 +158,14 @@ def register_manager():
                 break
 
         if exists=="FALSE":
-            database.add_manager(user,passw)
-            messagebox.showinfo("Parking","New manager sucessfully added!")
-            win.destroy()
+            if code==database.fetch_code():
+                database.add_manager(user,passw)
+                messagebox.showinfo("Parking","New manager sucessfully added!",parent=win)
+                win.destroy()
+            else:
+                messagebox.showerror("Alert","Security code Incorrect!",parent=win)
         else:
-            messagebox.showinfo("Alert","Account Already exists")
+            messagebox.showinfo("Alert","Account Already exists",parent=win)
         
     win=Toplevel()
     win.geometry("500x500")
@@ -176,27 +180,40 @@ def register_manager():
     password = Entry(frame,textvariable=StringVar)
     password.place(x=220,y=28)
 
+    Label(frame,text="Secuity Code").place(x=120,y=46)
+    security=Entry(frame,textvariable=StringVar())
+    security.place(x=220,y=46)
+
     Button(frame,text='Sign up',command=enter_manager).place(x=190,y=130)
     win.mainloop()
 
 
 def remove_manager():
-
     def check_manager():
         conn=database.makeconnection()
         c=conn.cursor()
+
         user=id.get()
         passw=password.get()
+        code=security.get()
         c.execute("SELECT id from managers WHERE password=?",(passw,))
         db_user=c.fetchone()
         c.execute("SELECT password from managers WHERE id=?",(user,))
         db_password=c.fetchone()
         
-        if db_user==None or db_password==None:   
-            messagebox.showinfo("Alert","Username Not Found")
+        if user=="admin":
+            messagebox.showerror("Alert","Admin account cannot deleted",parent=win)
+            
         else:
-            database.delete_manager(user)
-            messagebox.showinfo("Success","Manager Removed")
+            if code==database.fetch_code():
+                if db_user==None or db_password==None:   
+                    messagebox.showinfo("Alert","Username Not Found",parent=win)
+                else:
+                    database.delete_manager(user)
+                    messagebox.showinfo("Success","Manager Removed",parent=win)
+                    win.destroy()
+            else:
+                messagebox.showerror("Alert","Incorrect Security Code!!",parent=win)
         conn.close()
 
     win=Toplevel()
@@ -210,8 +227,7 @@ def remove_manager():
         if name == '':
             id.insert(0, 'Username')
     
-    id_var=StringVar()
-    id=Entry(win,text="Id",textvariable=id_var)
+    id=Entry(win,text="Id",textvariable=StringVar)
     id.pack()
     id.insert(0,"Username")
     id.bind('<FocusIn>', on_enter)
@@ -224,12 +240,14 @@ def remove_manager():
         if name == '':
             password.insert(0, 'Password')
 
-    password=StringVar()
-    password=Entry(win,textvariable=password)
+    password=Entry(win,textvariable=StringVar)
     password.pack()
     password.insert(0,"Password")
     password.bind('<FocusIn>', on_enter)
     password.bind('<FocusOut>', on_leave)
+
+    security=Entry(win,textvariable=StringVar)
+    security.pack()
 
     confirm=Button(win,text='Confirm',command=check_manager)
     confirm.pack()
@@ -237,16 +255,47 @@ def remove_manager():
 
     win.mainloop()
     
+def security_code():
+    win=Toplevel()
+    win.geometry("250x250")
+    current_code=StringVar()
+    new_code=StringVar()
+
+    current_entry=Entry(win,textvariable=current_code)
+    current_entry.pack()
+
+    new_entry=Entry(win,textvariable=new_code)
+    new_entry.pack()
+
+    def on_confirm():   
+        confirm_code=current_code.get()
+        real_code=database.fetch_code()
+        if confirm_code==real_code:
+            database.update_code(new_code.get())
+            messagebox.showinfo("Alert","Code updated")
+            win.destroy()
+
+        else:
+            messagebox.showinfo("Alert","Incorrect current code!!")
+    confirm=Button(win,text="Confirm",command=on_confirm)
+    confirm.pack()
+    
+    win.mainloop()
 
 #Frame for logo
 logo=Frame(root,bg="blue",width=30,height=50,borderwidth=4)
 logo.pack(fill=X)
+
 add_manager=Button(text="Add Manager",bg="purple",command=register_manager)
 add_manager.place(x=1400,y=13)
 
 delete_manager=Button(text="Remove Manager",bg="purple",command=remove_manager)
 delete_manager.place(x=1270,y=13)
+
+security=Button(text="Security Code",bg="purple",command=security_code)
+security.place(x=1150,y=13)
 lbl1=Label(logo,text="test")
+
 lbl1.place(x=600,y=10)
 
 def ask_location(button,name_id):

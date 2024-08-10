@@ -71,6 +71,7 @@ def get_user(username,password):
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM users WHERE username=? And password =? ",(username,password))
     result = cursor.fetchall()
+    print(result)
     return result
 
 def get_manager(id,password):
@@ -117,8 +118,3 @@ def calculate_time(id,location):
     return total_minutes
 
 
-def open_after_login():
-    import backend
-
-def open_after_logout():
-    import new_main

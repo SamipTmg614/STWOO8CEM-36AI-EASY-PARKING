@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 import database
 import subprocess,sys
-
+import profile
 #Function to open manager interface
 def manager_interface():
     win = Toplevel()
@@ -107,6 +107,7 @@ def customer_interface():#Function to open customer interface
         if result:
             win.destroy()
             root.destroy()
+            profile.profile_infos(result)
         else:
             messagebox.showerror('error','invalid login input')
 

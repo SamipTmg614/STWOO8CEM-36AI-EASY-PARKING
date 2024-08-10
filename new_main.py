@@ -1,16 +1,19 @@
 from tkinter import *
 from tkinter import messagebox
 import database
-
+import subprocess,sys
 
 #Function to open manager interface
 def manager_interface():
     win = Toplevel()
-    win.geometry('500x500')
-    win.maxsize(width = 500 , height=500)
-    win.minsize(width=500 , height=500)
-    win.title('parking management')
+    win.geometry('925x500')
+    win.configure(bg="#fff")
+    win.resizable(False, False)
+    win.title('easy parking')
+    win.iconbitmap('resources/logo.ico')
     database.manager_table()
+    img = PhotoImage(file='resources/loginpage.png',)
+    Label(win, image=img, bg='white').pack()
 
     checkvar = IntVar()
     def check():
@@ -27,28 +30,52 @@ def manager_interface():
         if result:
             win.destroy()
             root.destroy()
-            import backend
+            subprocess.Popen([sys.executable, 'backend.py'])
         else:
             messagebox.showerror('error','invalid login input')
 
 
-    Label(win,text='PARKING MANAGER').place(x=200,y=10)
+    frame = Frame(win,width=350,height=350,bg='#70B6AC')
+    frame.place(x=480,y=70)
 
-    frame = Frame(win,highlightbackground="black",borderwidth=2,width=400,height=400)
-    frame.place(x=0,y=50)
+    heading = Label(frame, text='Sign in', fg='black',bg='#70B6AC', font=('Trebuchet MS', 23))
+    heading.place(x=120, y=5)
 
-    Label(frame,text='username').place(x=150,y=10)
-    username = Entry(frame,textvariable=StringVar)
-    username.place(x=220,y=10)
+    def on_enter(e):
+        username.delete(0, 'end')
+    def on_leave(e):
+        name = username.get()
+        if name == '':
+            username.insert(0, 'Username')
+    # Label(frame,text='username').place(x=150,y=10)
+    username = Entry(frame,width=25, fg='black', border=0,bg='#70B6AC', font=('Trebuchet MS', 11),textvariable=StringVar)
+    username.place(x=30, y=80)
+    username.insert(0, 'Username')
+    username.bind('<FocusIn>', on_enter)
+    username.bind('<FocusOut>', on_leave)
+
+    Frame(frame, width=295, height=2, bg='black').place(x=25, y=107)
+
+    def on_enter(e):
+        password.delete(0, 'end')
+    def on_leave(e):
+        name = password.get()
+        if name == '':
+            password.insert(0, 'Password')
 
 
-    Label(frame,text='password').place(x=150,y=28)
-    password = Entry(frame,textvariable=StringVar,show='*')
-    password.place(x=220,y=28)
-    c = Checkbutton(frame,text='show password',variable=checkvar,onvalue=1,offvalue=0,height=1,width=20,command=check)
-    c.place(x=200,y=50)
+    password = Entry(frame, width=25, fg='black', border=0, bg="#70B6AC", font=('Trebuchet MS', 11),textvariable=StringVar,show='*')
+    password.place(x=30,y=150)
+    password.insert(0, 'Password')
+    password.bind('<FocusIn>', on_enter)
+    password.bind('<FocusOut>', on_leave)
 
-    Button(frame,text='Login',command=submit).place(x=190,y=70)
+    Frame(frame, width=295, height=2, bg='black').place(x=25, y=177)
+
+    c = Checkbutton(frame,text='show password',variable=checkvar,onvalue=1,offvalue=0,height=1,width=20,bg='#70B6AC',command=check)
+    c.place(x=30,y=200)
+
+    Button(frame, width=39, pady=0, text='LOGIN', bg='black', fg='white', border=1,command=submit).place(x=35,y=230)
 
     win.mainloop()
 
@@ -56,10 +83,13 @@ def manager_interface():
 
 def customer_interface():#Function to open customer interface
     win = Toplevel()
-    win.geometry('500x500')
-    win.maxsize(width = 500 , height=500)
-    win.minsize(width=500 , height=500)
-    win.title('parking management')
+    win.geometry('925x500')
+    win.configure(bg="#fff")
+    win.resizable(False, False)
+    win.title('easy parking')
+    win.iconbitmap('resources/logo.ico')
+    img = PhotoImage(file='resources/loginpage.png',)
+    Label(win, image=img, bg='white').pack()
 
     checkvar = IntVar()
     def check():
@@ -67,43 +97,69 @@ def customer_interface():#Function to open customer interface
             password.config(show='')
         else:
             password.config(show='*')
-    def submit():
+
+
+    def submit():#runs when login
         user = username.get()
         passw = password.get()
         database.user_table()
         result=database.get_user(user,passw)
         if result:
-            messagebox.showinfo('success','login successful')
             win.destroy()
             root.destroy()
         else:
             messagebox.showerror('error','invalid login input')
 
     def signup():
-        database.user_table()#just makes user table
+        database.user_table()# makes user table
         win.destroy()
         root.destroy()
         import register
 
-    Label(win,text='PARKING SYSTEM').place(x=200,y=10)
+    frame = Frame(win,width=350,height=350,bg='#70B6AC')
+    frame.place(x=480,y=70)
 
-    frame = Frame(win,highlightbackground="black",borderwidth=2,width=400,height=400)
-    frame.place(x=0,y=50)
+    heading = Label(frame, text='Sign in', fg='black',bg='#70B6AC', font=('Trebuchet MS', 23))
+    heading.place(x=120, y=5)
 
-    Label(frame,text='username').place(x=150,y=10)
-    username = Entry(frame,textvariable=StringVar)
-    username.place(x=220,y=10)
+    def on_enter(e):
+        username.delete(0, 'end')
+    def on_leave(e):
+        name = username.get()
+        if name == '':
+            username.insert(0, 'Username')
+    # Label(frame,text='username').place(x=150,y=10)
+    username = Entry(frame,width=25, fg='black', border=0,bg='#70B6AC', font=('Trebuchet MS', 11),textvariable=StringVar)
+    username.place(x=30, y=80)
+    username.insert(0, 'Username')
+    username.bind('<FocusIn>', on_enter)
+    username.bind('<FocusOut>', on_leave)
 
-    Label(frame,text='password').place(x=150,y=28)
-    password = Entry(frame,textvariable=StringVar,show='*')
-    password.place(x=220,y=28)
-    c = Checkbutton(frame,text='show password',variable=checkvar,onvalue=1,offvalue=0,height=1,width=20,command=check)
-    c.place(x=200,y=50)
+    
+    Frame(frame, width=295, height=2, bg='black').place(x=25, y=107)
 
-    Button(frame,text='Login',command=submit).place(x=190,y=70)
-    Label(frame,text="Don't have an account?").place(x=150,y=100)
+    def on_enter(e):
+        password.delete(0, 'end')
+    def on_leave(e):
+        name = password.get()
+        if name == '':
+            password.insert(0, 'Password')
 
-    Button(frame,text='Sign up',command=signup).place(x=190,y=130)
+
+    password = Entry(frame, width=25, fg='black', border=0, bg="#70B6AC", font=('Trebuchet MS', 11),textvariable=StringVar,show='*')
+    password.place(x=30,y=150)
+    password.insert(0, 'Password')
+    password.bind('<FocusIn>', on_enter)
+    password.bind('<FocusOut>', on_leave)
+
+    Frame(frame, width=295, height=2, bg='black').place(x=25, y=177)
+
+    c = Checkbutton(frame,text='show password',variable=checkvar,onvalue=1,offvalue=0,height=1,width=20,bg='#70B6AC',command=check)
+    c.place(x=30,y=200)
+    Button(frame, width=39, pady=0, text='LOGIN', bg='black', fg='white', border=1,command=submit).place(x=35,y=230)
+    Label(frame,text="don't have an account?",bg='#70B6AC', font=('Trebuchet MS', 11,)).place(x=45,y=260)
+    Button(frame, width=5,padx=0, pady=0, text='signup', bg='#70B6AC', fg='black', border=0,command=signup).place(x=205,y=265)
+
 
 
     win.mainloop()                                           
@@ -111,6 +167,8 @@ def customer_interface():#Function to open customer interface
 root=Tk()
 root.geometry('1920x880')
 
+# img = PhotoImage(file='resources/mainbg.png',)
+# Label(root, image=img, bg='white').pack()
 logo_lbl=Label(text="Car Parking",font=("courier",40,"bold")).pack()#Label for logo
 
 manager_button=Button(text="Manager",font=("courier",30,"bold"),width=10,height=2,bg="black",fg="white",

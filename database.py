@@ -117,3 +117,8 @@ def calculate_time(id,location):
     return total_minutes
 
 
+def open_after_login():
+    import backend
+
+def open_after_logout():
+    import new_main

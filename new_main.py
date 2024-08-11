@@ -159,7 +159,7 @@ def customer_interface():#Function to open customer interface
     c.place(x=30,y=200)
     Button(frame, width=39, pady=0, text='LOGIN', bg='black', fg='white', border=1,command=submit).place(x=35,y=230)
     Label(frame,text="don't have an account?",bg='#70B6AC', font=('Trebuchet MS', 11,)).place(x=45,y=260)
-    Button(frame, width=5,padx=0, pady=0, text='signup', bg='#70B6AC', fg='black', border=0,command=signup).place(x=205,y=265)
+    Button(frame, width=5,padx=0, pady=0, text='signup', bg='#70B6AC', fg='black', border=0,command=signup).place(x=45,y=260)
 
 
 

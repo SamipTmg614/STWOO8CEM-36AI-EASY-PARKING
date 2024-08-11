@@ -7,6 +7,8 @@ def profile_infos(data):
     root = Tk()
     root.geometry('500x500')
     root.title('profile')
+    root.resizable(False, False)
+
     img = PhotoImage(file='resources/profile.png',)
     Label(root, image=img, bg='white').pack()
 
@@ -41,6 +43,8 @@ def profile_infos(data):
         win.geometry('250x250')
         win.title("change details")
         win.config(bg='#70B6AC')
+        win.resizable(False, False)
+
 
         label_menu = Label(win, text="Select an option:")
         label_menu.pack(pady=5)
@@ -73,7 +77,12 @@ def profile_infos(data):
             conn.commit()
             conn.close()
             
-            data=database.get_user(user_name,passw)
+            if chosen_option=="password":
+                data=database.get_user(user_name,entered_text)
+            elif chosen_option=='username':
+                data=database.get_user(entered_text,passw)
+            else:
+                data=database.get_user(user_name,passw)
             root.destroy()
             profile_infos(data)
 
@@ -81,8 +90,7 @@ def profile_infos(data):
         submit_button = Button(win, text="Submit", command=submit)
         submit_button.pack(pady=10)
 
-        close_button = Button(win, text="Close", command=win.destroy)
-        close_button.pack(pady=10)
+
 
 
     Button(root, text="Change details", command=change_details).place(x=20,y=320)

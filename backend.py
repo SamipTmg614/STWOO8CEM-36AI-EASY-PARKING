@@ -10,7 +10,7 @@ root.geometry("1920x880")
 def green(button,x,location):
     conn=database.makeconnection()
     c=conn.cursor()
-    button.config(text="available",bg="green")
+    button.config(text="available",bg="148578")
     c.execute(f'''UPDATE {location}
                     SET status=?,model=NULL,number=NULL
                     WHERE id=? 

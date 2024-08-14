@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
-import datetime
+import datetime,sys,subprocess
 import database
 root=Tk()
 root.geometry("1920x880")
@@ -182,9 +182,12 @@ def register_manager():
     
 def logout_manager():
     response=messagebox.askyesno("Confirm","Do you want to logout?")
-    if response==1:    
-        root.destroy()
-        import new_main
+    if response==1:  
+       root.destroy()
+       subprocess.Popen([sys.executable, 'new_main.py'])
+
+        
+
 #Frame for logo
 logo=Frame(root,bg="grey",width=30,height=50,borderwidth=4)
 logo.pack(fill=X)
@@ -219,7 +222,7 @@ def ask_location(button,name_id):
                 button.config(text=location_var.get())
                 create_button(name_id)
                 win.destroy()
-            confirm_btn=Button(win,text="remove",command=lambda:on_confirm())
+            confirm_btn=Button(win,text="submit",command=lambda:on_confirm())
             confirm_btn.pack()
             win.mainloop()
     else:
@@ -235,7 +238,7 @@ def create_button(name_id):
         ...
     location=name_id
     database.location_table(location)
-    spaces=Frame(root,width=700,height=880,borderwidth=4,relief=GROOVE)
+    spaces=Frame(root,width=700,height=880,borderwidth=1,relief=GROOVE)
     spaces.pack(side=RIGHT)
     lbl2=Label(spaces,text="Available Spaces",font=("courier",19,"bold"))
     lbl2.place(x=200)

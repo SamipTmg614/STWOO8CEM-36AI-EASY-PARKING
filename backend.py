@@ -1,8 +1,8 @@
 from tkinter import *
 from tkinter import messagebox
 from PIL import Image,ImageTk
-import datetime
-import database,backend_funtions
+import database,backend_funtions,subprocess,sys
+
 
 def register_manager():
     def enter_manager():
@@ -38,48 +38,51 @@ def register_manager():
     win.configure(bg='#017A5E')
     Label(win,text="Add Manager",bg='#017A5E',font=(Font,20,'bold'),fg='black').place(x=50,y=10)
 
-    def on_enter(e):
+    def on_enter_name(e):
         name.delete(0, 'end')
-    def on_leave(e):
+    def on_leave_name(e):
         name_= name.get()
         if name_== '':
             name.insert(0, 'name')
-
-    name = Entry(win,width=30, fg='black', border=0,bg='#70B6AC', font=('Trebuchet MS', 12),textvariable=StringVar)
+    
+    name_var=StringVar()
+    name = Entry(win,width=30, fg='black', border=0,bg='#70B6AC', font=('Trebuchet MS', 12),textvariable=name_var)
     name.place(x=30, y=80)
 
     name.insert(0, 'name')
-    name.bind('<FocusIn>', on_enter)
-    name.bind('<FocusOut>', on_leave)
+    name.bind('<FocusIn>', on_enter_name)
+    name.bind('<FocusOut>', on_leave_name)
 
 
-    def on_enter(e):
+    def on_enter_password(e):
         password.delete(0, 'end')
-    def on_leave(e):
-        name_= password.get()
-        if name_== '':
+    def on_leave_password(e):
+        get= password.get()
+        if get== '':
             password.insert(0, 'password')
 
-    password = Entry(win,width=30, fg='black', border=0,bg='#70B6AC', font=('Trebuchet MS', 12),textvariable=StringVar)
+    password_var =StringVar()
+    password = Entry(win,width=30, fg='black', border=0,bg='#70B6AC', font=('Trebuchet MS', 12),textvariable=password_var)
     password.place(x=30, y=120)
 
     password.insert(0, 'password')
-    password.bind('<FocusIn>', on_enter)
-    password.bind('<FocusOut>', on_leave)
+    password.bind('<FocusIn>', on_enter_password)
+    password.bind('<FocusOut>', on_leave_password)
 
-    def on_enter(e):
+    def on_enter_security(e):
         security.delete(0, 'end')
-    def on_leave(e):
+    def on_leave_security(e):
         security_= security.get()
         if security_== '':
             security.insert(0, 'security code')
-
-    security = Entry(win,width=30, fg='black', border=0,bg='#70B6AC', font=('Trebuchet MS', 12),textvariable=StringVar)
+    
+    security_var=StringVar()
+    security = Entry(win,width=30, fg='black', border=0,bg='#70B6AC', font=('Trebuchet MS', 12),textvariable=security_var)
     security.place(x=30, y=160)
 
     security.insert(0, 'security code')
-    security.bind('<FocusIn>', on_enter)
-    security.bind('<FocusOut>', on_leave)
+    security.bind('<FocusIn>', on_enter_security)
+    security.bind('<FocusOut>', on_leave_security)
 
     button = Button(win, text="Submit", bg='#CBFDF1', width=15, font=(Font, 10),activebackground="#CBFDF1",command=enter_manager)
     button.place(x=80, y=220)
@@ -121,48 +124,51 @@ def remove_manager():
     win.configure(bg='#017A5E')
     Label(win,text="Remove Manger",bg='#017A5E',font=(Font,20,'bold'),fg='black').place(x=50,y=10)
 
-    def on_enter(e):
+    def on_enter_Name(e):
         name.delete(0, 'end')
-    def on_leave(e):
+    def on_leave_Name(e):
         name_= name.get()
         if name_== '':
-            name_.insert(0, 'name')
+            name.insert(0, 'name')
 
-    name = Entry(win,width=30, fg='black', border=0,bg='#70B6AC', font=('Trebuchet MS', 12),textvariable=StringVar)
+    Name_var=StringVar()
+    name = Entry(win,width=30, fg='black', border=0,bg='#70B6AC', font=('Trebuchet MS', 12),textvariable=Name_var)
     name.place(x=30, y=80)
 
     name.insert(0, 'name')
-    name.bind('<FocusIn>', on_enter)
-    name.bind('<FocusOut>', on_leave)
+    name.bind('<FocusIn>', on_enter_Name)
+    name.bind('<FocusOut>', on_leave_Name)
 
 
-    def on_enter(e):
+    def on_enter_passw(e):
         password.delete(0, 'end')
-    def on_leave(e):
-        name = password.get()
-        if name == '':
+    def on_leave_passw(e):
+        get= password.get()
+        if get== '':
             password.insert(0, 'password')
 
-    password = Entry(win,width=30, fg='black', border=0,bg='#70B6AC', font=('Trebuchet MS', 12),textvariable=StringVar)
+    Password_var=StringVar()
+    password = Entry(win,width=30, fg='black', border=0,bg='#70B6AC', font=('Trebuchet MS', 12),textvariable=Password_var)
     password.place(x=30, y=120)
 
     password.insert(0, 'password')
-    password.bind('<FocusIn>', on_enter)
-    password.bind('<FocusOut>', on_leave)
+    password.bind('<FocusIn>', on_enter_passw)
+    password.bind('<FocusOut>', on_leave_passw)
 
-    def on_enter(e):
+    def on_enter_security(e):
         code.delete(0, 'end')
-    def on_leave(e):
-        name = code.get()
-        if name == '':
+    def on_leave_security(e):
+        fetch= code.get()
+        if fetch == '':
             code.insert(0, 'security code')
 
-    code = Entry(win,width=30, fg='black', border=0,bg='#70B6AC', font=('Trebuchet MS', 12),textvariable=StringVar)
+    code_var=StringVar()
+    code = Entry(win,width=30, fg='black', border=0,bg='#70B6AC', font=('Trebuchet MS', 12),textvariable=code_var)
     code.place(x=30, y=160)
 
     code.insert(0, 'security code')
-    code.bind('<FocusIn>', on_enter)
-    code.bind('<FocusOut>', on_leave)
+    code.bind('<FocusIn>', on_enter_security)
+    code.bind('<FocusOut>', on_leave_security)
 
     button = Button(win, text="Submit", bg='#CBFDF1', width=15, font=(Font, 10),activebackground="#CBFDF1",command=check_manager)
     button.place(x=100, y=220)
@@ -184,9 +190,9 @@ def security_code():
     win.configure(bg='#017A5E')
     Label(win,text="Edit Security Code",bg='#017A5E',font=(Font,20,'bold'),fg='black').place(x=40,y=10)
 
-    def on_enter(e):
+    def on_enter_current(e):
         current_code.delete(0, 'end')
-    def on_leave(e):
+    def on_leave_current(e):
         name = current_code.get()
         if name == '':
             current_code.insert(0, 'current code')
@@ -195,13 +201,13 @@ def security_code():
     current_code.place(x=30, y=80)
 
     current_code.insert(0, 'current code')
-    current_code.bind('<FocusIn>', on_enter)
-    current_code.bind('<FocusOut>', on_leave)
+    current_code.bind('<FocusIn>', on_enter_current)
+    current_code.bind('<FocusOut>', on_leave_current)
 
 
-    def on_enter(e):
+    def on_enter_new(e):
         new_code.delete(0, 'end')
-    def on_leave(e):
+    def on_leave_new(e):
         name = new_code.get()
         if name == '':
             new_code.insert(0, 'new code')
@@ -210,8 +216,8 @@ def security_code():
     new_code.place(x=30, y=120)
 
     new_code.insert(0, 'new code')
-    new_code.bind('<FocusIn>', on_enter)
-    new_code.bind('<FocusOut>', on_leave)
+    new_code.bind('<FocusIn>', on_enter_new)
+    new_code.bind('<FocusOut>', on_leave_new)
 
     button = Button(win, text="Submit", bg='#CBFDF1', width=15, font=(Font, 10),activebackground="#CBFDF1",command=on_confirm)
     button.place(x=100, y=180)
@@ -221,8 +227,8 @@ def security_code():
 
 def Logout():
     root.destroy()
-    import main
-    main.main()
+    import new_main
+    subprocess.Popen([sys.executable, 'manager_interface.py'])
 
 
   
@@ -233,7 +239,7 @@ black="black"
 white="white"
 Font="Trebuchet MS"
 
-root_image = Image.open("clear_bg.jpeg")
+root_image = Image.open("resources/clear_bg.jpeg")
 root_photo = ImageTk.PhotoImage(root_image.resize((1920, 880)))
 
 canvas = Canvas(root, width=1920, height=880)
@@ -241,7 +247,7 @@ canvas.pack(fill="both", expand=True)
 canvas.create_image(0, 0, image=root_photo, anchor="nw")
 
 
-logo_image=Image.open("logo.png")
+logo_image=Image.open("resources/logo.png")
 photo=ImageTk.PhotoImage(logo_image.resize((70,70)))
 canvas.create_image(35, 35, image=photo, anchor="nw")
 

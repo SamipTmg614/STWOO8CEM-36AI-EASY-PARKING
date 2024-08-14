@@ -41,34 +41,35 @@ def manager_interface():
     heading = Label(frame, text='Sign in', fg='black',bg='#70B6AC', font=('Trebuchet MS', 23))
     heading.place(x=120, y=5)
 
-    def on_enter(e):
+    def on_enter_username(e):
         username.delete(0, 'end')
-    def on_leave(e):
+    def on_leave_username(e):
         name = username.get()
         if name == '':
             username.insert(0, 'Username')
+
     # Label(frame,text='username').place(x=150,y=10)
     username = Entry(frame,width=25, fg='black', border=0,bg='#70B6AC', font=('Trebuchet MS', 11),textvariable=StringVar)
     username.place(x=30, y=80)
     username.insert(0, 'Username')
-    username.bind('<FocusIn>', on_enter)
-    username.bind('<FocusOut>', on_leave)
+    username.bind('<FocusIn>', on_enter_username)
+    username.bind('<FocusOut>', on_leave_username)
 
     Frame(frame, width=295, height=2, bg='black').place(x=25, y=107)
 
-    def on_enter(e):
+    def on_enter_password(e):
         password.delete(0, 'end')
-    def on_leave(e):
-        name = password.get()
-        if name == '':
+    def on_leave_password(e):
+        name_= password.get()
+        if name_== '':
             password.insert(0, 'Password')
 
 
     password = Entry(frame, width=25, fg='black', border=0, bg="#70B6AC", font=('Trebuchet MS', 11),textvariable=StringVar,show='*')
     password.place(x=30,y=150)
     password.insert(0, 'Password')
-    password.bind('<FocusIn>', on_enter)
-    password.bind('<FocusOut>', on_leave)
+    password.bind('<FocusIn>', on_enter_password)
+    password.bind('<FocusOut>', on_leave_password)
 
     Frame(frame, width=295, height=2, bg='black').place(x=25, y=177)
 
@@ -123,9 +124,9 @@ def customer_interface():#Function to open customer interface
     heading = Label(frame, text='Sign in', fg='black',bg='#70B6AC', font=('Trebuchet MS', 23))
     heading.place(x=120, y=5)
 
-    def on_enter(e):
+    def on_enter_username(e):
         username.delete(0, 'end')
-    def on_leave(e):
+    def on_leave_username(e):
         name = username.get()
         if name == '':
             username.insert(0, 'Username')
@@ -133,25 +134,25 @@ def customer_interface():#Function to open customer interface
     username = Entry(frame,width=25, fg='black', border=0,bg='#70B6AC', font=('Trebuchet MS', 11),textvariable=StringVar)
     username.place(x=30, y=80)
     username.insert(0, 'Username')
-    username.bind('<FocusIn>', on_enter)
-    username.bind('<FocusOut>', on_leave)
+    username.bind('<FocusIn>', on_enter_username)
+    username.bind('<FocusOut>', on_leave_username)
 
     
     Frame(frame, width=295, height=2, bg='black').place(x=25, y=107)
 
-    def on_enter(e):
+    def on_enter_password(e):
         password.delete(0, 'end')
-    def on_leave(e):
-        name = password.get()
-        if name == '':
+    def on_leave_password(e):
+        name_= password.get()
+        if name_== '':
             password.insert(0, 'Password')
 
 
     password = Entry(frame, width=25, fg='black', border=0, bg="#70B6AC", font=('Trebuchet MS', 11),textvariable=StringVar,show='*')
     password.place(x=30,y=150)
     password.insert(0, 'Password')
-    password.bind('<FocusIn>', on_enter)
-    password.bind('<FocusOut>', on_leave)
+    password.bind('<FocusIn>', on_enter_password)
+    password.bind('<FocusOut>', on_leave_password)
 
     Frame(frame, width=295, height=2, bg='black').place(x=25, y=177)
 

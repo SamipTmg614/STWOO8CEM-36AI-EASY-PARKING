@@ -291,11 +291,24 @@ def ask_location(button,name_id):
                 win.destroy()
             win=Toplevel()
             win.geometry("300x300")
+            win.configure(bg='#017A5E')
+            def on_enter(e):
+                location_name.delete(0, 'end')
+            def on_leave(e):
+                name = location_var.get()
+                if name == '':
+                    location_name.insert(0, 'location')
+
+            Label(win,text="Location Name",bg='#017A5E',font=(Font,20,'bold'),fg='black').place(x=60,y=5)
             location_var=StringVar()
-            location_name=Entry(win,textvariable=location_var)
-            location_name.pack()
-            confirm_btn=Button(win,text="Confirm",command=lambda:on_confirm())
-            confirm_btn.pack()
+            location_name=Entry(win,width=30, fg='black', border=0,bg='#70B6AC', font=('Trebuchet MS', 12),textvariable=location_var)
+            location_name.insert(0, 'location')
+            location_name.bind('<FocusIn>', on_enter)
+            location_name.bind('<FocusOut>', on_leave)
+            location_name.place(x=30,y=60)
+
+            confirm_btn=Button(win, text="Submit", bg='#CBFDF1', width=15, font=(Font, 10),activebackground="#CBFDF1",command=on_confirm)
+            confirm_btn.place(x=90,y=100)
             win.mainloop()
     else:
         backend_funtions.create_button(name_id,root,canvas)

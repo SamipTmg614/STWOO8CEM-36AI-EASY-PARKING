@@ -122,6 +122,7 @@ def calculate_time(id,location):
     difference=current_time-entry_time
     total_minutes=int(difference.total_seconds()/60)
     conn.close()
+    
     return total_minutes
 
 def delete_manager(id):

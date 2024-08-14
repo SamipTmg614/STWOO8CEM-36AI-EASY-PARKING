@@ -51,8 +51,8 @@ def check_slot(button,x,location):
         details=c.fetchmany()
 
         Label(win,text="Details",bg='#017A5E',font=('Trebuchet MS',20,'bold'),fg='black').place(x=100,y=5)
-        Label(win,text=f"Model:{details[0][0]}",bg='#70B6AC',width=20,font=('Trebuchet MS',12),fg='black').place(x=40,y=60)
-        Label(win,text=f"Number:{details[0][1]}",bg='#70B6AC',width=20,font=('Trebuchet MS',12),fg='black').place(x=40,y=85)
+        Label(win,text=f"Model:{details[0][0]}",bg='#70B6AC',width=23,font=('Trebuchet MS',12),fg='black').place(x=40,y=60)
+        Label(win,text=f"Number:{details[0][1]}",bg='#70B6AC',width=23,font=('Trebuchet MS',12),fg='black').place(x=40,y=85)
 
         c.execute(f"SELECT minute FROM {location} WHERE id=?",(x,))
         minute=c.fetchone()
@@ -61,12 +61,12 @@ def check_slot(button,x,location):
 
         price=database.calculate_time(x,location)
         time_label=f"{hour[0]}:{minute[0]}"
-        Label(win,text=f"Entry Time:{time_label}",bg='#70B6AC',width=20,font=('Trebuchet MS',12),fg='black').place(x=40,y=110)
-        Label(win,text=f"Price:{price}",bg='#70B6AC',width=20,font=('Trebuchet MS',12),fg='black').place(x=40,y=135)
+        Label(win,text=f"Entry Time:{time_label}",bg='#70B6AC',width=23,font=('Trebuchet MS',12),fg='black').place(x=40,y=110)
+        Label(win,text=f"Price:{price}",bg='#70B6AC',width=23,font=('Trebuchet MS',12),fg='black').place(x=40,y=135)
         conn.close()
 
         submit= Button(win, text="Submit", bg='#CBFDF1', width=15, font=('Trebuchet MS', 10),activebackground="#CBFDF1",command=lambda:[red(button,x,location,win)])
-        submit.place(x=60,y=165)
+        submit.place(x=80,y=165)
         win.mainloop()
 
     elif status[0]=="TRUE":
@@ -75,7 +75,7 @@ def check_slot(button,x,location):
         win.configure(bg='#017A5E')
         Label(win,text="Details",bg='#017A5E',font=('Trebuchet MS',20,'bold'),fg='black').place(x=100,y=10)
         global model_var
-        model_var = Entry(win,width=25, fg='black', border=0,bg='#70B6AC', font=('Trebuchet MS', 12),textvariable=StringVar)
+        model_var = Entry(win,width=23, fg='black', border=0,bg='#70B6AC', font=('Trebuchet MS', 12),textvariable=StringVar)
         def on_enter(e):
             model_var.delete(0, 'end')
         def on_leave(e):
@@ -89,7 +89,7 @@ def check_slot(button,x,location):
         model_var.bind('<FocusOut>', on_leave)
 
         global number_var
-        number_var = Entry(win,width=25, fg='black', border=0,bg='#70B6AC', font=('Trebuchet MS', 12),textvariable=StringVar)
+        number_var = Entry(win,width=23, fg='black', border=0,bg='#70B6AC', font=('Trebuchet MS', 12),textvariable=StringVar)
         def on_enter(e):
             number_var.delete(0, 'end')
         def on_leave(e):

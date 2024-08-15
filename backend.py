@@ -273,8 +273,6 @@ logout.place(x=1450,y=43)
 
 
 def ask_location():
-    conn=database.makeconnection()
-    c=conn.cursor()
     def on_confirm():
         if code_var.get()==database.fetch_code():
             database.add_location(location_var.get())
@@ -335,7 +333,7 @@ def update_positions(value,):
 location_frame=Frame()
 
 frames=[]
-Button(root,text="Add",command=lambda:ask_location()).place(x=50,y=50)
+Button(text="Add Location",cursor="hand2",bg=cyan,fg=black,font=(Font,10),width=14,command=lambda:ask_location()).place(x=650,y=140)
 
 loc = Frame(root,bg=cyan,height=535,width=600)#slider frame
 loc.place(x=50,y=240)

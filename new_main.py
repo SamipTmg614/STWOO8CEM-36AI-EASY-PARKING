@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 import database
 import subprocess,sys
-import profile_
+import frontend
 #Function to open manager interface
 def manager_interface():
     win = Toplevel()
@@ -108,7 +108,7 @@ def customer_interface():#Function to open customer interface
         if result:
             win.destroy()
             root.destroy()
-            profile_.profile_infos(result)
+            frontend.frontpage(result)
         else:
             messagebox.showerror('error','invalid login input')
 
@@ -169,8 +169,8 @@ def customer_interface():#Function to open customer interface
 root=Tk()
 root.geometry('1920x880')
 
-# img = PhotoImage(file='resources/mainbg.png',)
-# Label(root, image=img, bg='white').pack()
+img = PhotoImage(file='resources/mainbg.png',)
+Label(root, image=img, bg='white').pack()
 logo_lbl=Label(text="Car Parking",font=("courier",40,"bold")).pack()#Label for logo
 
 manager_button=Button(text="Manager",font=("courier",30,"bold"),width=10,height=2,bg="black",fg="white",

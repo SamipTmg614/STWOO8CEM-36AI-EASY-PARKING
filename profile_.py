@@ -3,8 +3,8 @@ from tkinter import messagebox
 import database
 import subprocess,sys
 
-def profile_infos(data):
-    root = Tk()
+def profile_infos(data,a):
+    root = Toplevel()
     root.geometry('500x500')
     root.title('profile')
     root.resizable(False, False)
@@ -17,22 +17,25 @@ def profile_infos(data):
     phone_number = data[0][2]
     email = data[0][3]
     passw = data[0][4]
-    Label(root,text=user_name, fg='white',bg='black',font=('Trebuchet MS', 23)).place(x=215,y=120,height=23)
+    name = Label(root,text=user_name, fg='white',bg='black',font=('Trebuchet MS', 23))
+    name.place(x=215,y=120,height=23)
 
     Label(root,text='full_name', fg='black',bg='#70B6AC', font=('Trebuchet MS', 15)).place(x=20,y=170,height=23)
     Label(root,text=full_name, fg='black',bg='#70B6AC',font=('Trebuchet MS', 15)).place(x=150,y=170,height=23)
 
     Label(root,text='phone number', fg='black',bg='#70B6AC', font=('Trebuchet MS', 15)).place(x=20,y=210,height=23)
-    Label(root,text=phone_number, fg='black',bg='#70B6AC',font=('Trebuchet MS', 15)).place(x=150,y=210,height=23)
+    number=Label(root,text=phone_number, fg='black',bg='#70B6AC',font=('Trebuchet MS', 15))
+    number.place(x=150,y=210,height=23)
 
     Label(root,text='email', fg='black',bg='#70B6AC',font=('Trebuchet MS', 15)).place(x=20,y=250,height=23)
-    Label(root,text=email, fg='black',bg='#70B6AC', font=('Trebuchet MS', 15)).place(x=150,y=250,height=23)
-
+    mail=Label(root,text=email, fg='black',bg='#70B6AC', font=('Trebuchet MS', 15))
+    mail.place(x=150,y=250,height=23)
 
 
     def logout():
-        root.destroy()
+        a.destroy()
         subprocess.Popen([sys.executable, 'new_main.py'])
+        root.destroy()
 
     btn = Button(root,width=20,bg='#325971',text='logout',command=logout)
     btn.place(x=290,y=400,height=37)
@@ -81,10 +84,14 @@ def profile_infos(data):
                 data=database.get_user(user_name,entered_text)
             elif chosen_option=='username':
                 data=database.get_user(entered_text,passw)
+                name.configure(text=f"{entry_box.get()}")
+            elif chosen_option=='email':
+                data=database.get_user(user_name,passw)
+                mail.configure(text=f'{entry_box.get()}')
             else:
                 data=database.get_user(user_name,passw)
-            root.destroy()
-            profile_infos(data)
+                number.configure(text=f'{entry_box.get()}')
+            win.destroy()
 
 
         submit_button = Button(win, text="Submit", command=submit)

@@ -146,7 +146,7 @@ def button_status(button,x,location):
         button.config(text="Add",bg="#cbfdf1")
     conn.close() 
 
-def create_button(name_id,root,canvas):
+def create_button(name_id,root,canvas,canvas_var):
     cyan="#70B6AC"
     Font="Trebuchet MS"
     location=name_id
@@ -155,9 +155,10 @@ def create_button(name_id,root,canvas):
     c=conn.cursor()
     c.execute("SELECT name FROM location_map WHERE id=?",(location,))
     name=c.fetchone()
-    name=canvas.create_text(140, 40, text=f"{name[0]}", font=(Font, 40, "bold"), fill=cyan)
-    canvas.coords(name, 1170, 180)
 
+
+    canvas.itemconfig(canvas_var,text=f"{name[0]}")
+    
     #32 Buttons for 32 root
     b1=Button(root,height=1,width=5,cursor="hand2",command=lambda:check_slot(b1,"1",location))
     b1.place(x=830,y=250)

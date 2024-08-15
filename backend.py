@@ -246,6 +246,7 @@ canvas = Canvas(root, width=1920, height=880)
 canvas.pack(fill="both", expand=True)
 canvas.create_image(0, 0, image=root_photo, anchor="nw")
 
+canvas_var=canvas.create_text(1170,170,text=' ',font=(Font, 40, "bold"), fill=cyan)
 
 logo_image=Image.open("logo.png")
 photo=ImageTk.PhotoImage(logo_image.resize((70,70)))
@@ -278,17 +279,19 @@ def ask_location(button,name_id):
     given_name=c.fetchone()
 
     if given_name[0]=="ADD":
-        response=messagebox.askyesno("Confirm","Do you want to add a location?")
-        if response==1:
             def on_confirm():
-                c.execute('''UPDATE location_map
-                            SET name=?
-                            WHERE id=?''',(location_var.get(),name_id))
-                conn.commit()
-                conn.close()
-                button.config(text=location_var.get())
-                backend_funtions.create_button(name_id,root,canvas)
-                win.destroy()
+                security_code=database.fetch_code()
+                if security_code==code_var.get():
+                    c.execute('''UPDATE location_map
+                                SET name=?
+                                WHERE id=?''',(location_var.get(),name_id))
+                    conn.commit()
+                    conn.close()
+                    button.config(text=location_var.get())
+                    backend_funtions.create_button(name_id,root,canvas,canvas_var)
+                    win.destroy()
+                else:
+                    messagebox.showerror("Alert","Security Code incorrect!!!")
             win=Toplevel()
             win.geometry("300x300")
             win.configure(bg='#017A5E')
@@ -309,12 +312,27 @@ def ask_location(button,name_id):
             location_name.bind('<FocusOut>', on_leave)
             location_name.place(x=30,y=60)
 
+            def on_enter_security(e):
+                code.delete(0, 'end')
+            def on_leave_security(e):
+                fetch= code.get()
+                if fetch == '':
+                    code.insert(0, 'security code')
+
+            code_var=StringVar()
+            code = Entry(win,width=30, fg='black', border=0,bg='#70B6AC', font=('Trebuchet MS', 12),textvariable=code_var)
+            code.place(x=30, y=100)
+
+            code.insert(0, 'security code')
+            code.bind('<FocusIn>', on_enter_security)
+            code.bind('<FocusOut>', on_leave_security)
+
             confirm_btn=Button(win, text="Submit", bg='#CBFDF1', width=15, font=(Font, 10),activebackground="#CBFDF1",command=on_confirm)
-            confirm_btn.place(x=90,y=100)
+            confirm_btn.place(x=90,y=160)
 
             win.mainloop()
     else:
-        backend_funtions.create_button(name_id,root,canvas)
+        backend_funtions.create_button(name_id,root,canvas,canvas_var)
         conn.close()
 
 database.location_map()

@@ -324,28 +324,21 @@ def ask_location():
 
 def update_positions(value,):
     y_start = 60 - int(float(value))# Start position for frames 
-    var=1   
+    var=0  
     for i, frame in enumerate(frames):           
-        if var<4:
+        new_y = y_start + var*100  # Adjust each frame's y position based on the scale
+        if (i+1)%3==0:
             var+=1 
-            new_y= y_start    
-        else:
-            new_y = y_start + var*100  # Adjust each frame's y position based on the scale
-            var=1
-            
+                         
         frame.place_configure(y=new_y)  # Update the frame's position
 
 location_frame=Frame()
 
-loc = Frame(root,bg='white',height=535,width=728)
-loc.place(x=135,y=188)
-
-
 frames=[]
 Button(root,text="Add",command=lambda:ask_location()).place(x=50,y=50)
 
-loc = Frame(root,bg='white',height=535,width=728)#slider frame
-loc.place(x=135,y=188)
+loc = Frame(root,bg=cyan,height=535,width=600)#slider frame
+loc.place(x=50,y=240)
 
  
 def create_location_buttons():
@@ -360,8 +353,8 @@ def create_location_buttons():
         frame.destroy()
     frames.clear()
     
-    y_axis=60
-    x_axis=100
+    y_axis=20
+    x_axis=30
     ro=1
     co=1
 
@@ -376,7 +369,7 @@ def create_location_buttons():
         else:
             ro=1
             y_axis+=100
-            x_axis=100
+            x_axis=30
             
     
         btn=Button(frame,cursor="hand2",text=location[i],height=3,width=20,background="#AEDCC4",font=(Font,10),command=lambda i=i: backend_funtions.create_button(location_id[i][0], root, canvas, canvas_var))
@@ -386,17 +379,17 @@ def create_location_buttons():
         frames.append(frame)
 
     scale_float = DoubleVar(value=1)
-    scale=Scale(root,
+    scale=Scale(loc,
                     bg='black',command=update_positions,
                     fg='#EACF91',
                     from_ = 0,
-                    to = len(location_id)*100,
+                    to = len(location_id)*20,
                     length = 500,
                     orient = VERTICAL,
                     variable=scale_float,
                     )
 
-    scale.place(x=808,y=215)
+    scale.place(x=550,y=20)
 
 
 locations=canvas.create_text(140, 40, text="Locations", font=(Font, 30, "bold"), fill=cyan)

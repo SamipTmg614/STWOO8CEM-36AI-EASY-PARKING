@@ -239,15 +239,16 @@ black="black"
 white="white"
 Font="Trebuchet MS"
 
-root_image = Image.open("resources/clear_bg.jpeg")
+root_image = Image.open("clear_bg.jpeg")
 root_photo = ImageTk.PhotoImage(root_image.resize((1920, 880)))
 
 canvas = Canvas(root, width=1920, height=880)
 canvas.pack(fill="both", expand=True)
 canvas.create_image(0, 0, image=root_photo, anchor="nw")
 
+canvas_var=canvas.create_text(1170,170,text=' ',font=(Font, 40, "bold"), fill=cyan)
 
-logo_image=Image.open("resources/logo.png")
+logo_image=Image.open("logo.png")
 photo=ImageTk.PhotoImage(logo_image.resize((70,70)))
 canvas.create_image(35, 35, image=photo, anchor="nw")
 
@@ -271,128 +272,128 @@ logout=Button(text="Logout",cursor="hand2",bg=cyan,fg=black,font=(Font,10),width
 logout.place(x=1450,y=43)
 
 
-def ask_location(button,name_id):
+def ask_location():
     conn=database.makeconnection()
     c=conn.cursor()
-    c.execute(f"SELECT name FROM location_map WHERE id=?",(name_id,))
-    given_name=c.fetchone()
+    def on_confirm():
+        if code_var.get()==database.fetch_code():
+            database.add_location(location_var.get())
+            create_location_buttons()
+            win.destroy()
+        else:
+            messagebox.showerror("Alert","Wrong Code",parent=win)
+    win=Toplevel()
+    win.geometry("300x300")
+    win.configure(bg='#017A5E')
 
-    if given_name[0]=="ADD":
-        response=messagebox.askyesno("Confirm","Do you want to add a location?")
-        if response==1:
-            def on_confirm():
-                c.execute('''UPDATE location_map
-                            SET name=?
-                            WHERE id=?''',(location_var.get(),name_id))
-                conn.commit()
-                conn.close()
-                button.config(text=location_var.get())
-                backend_funtions.create_button(name_id,root,canvas)
-                win.destroy()
-            win=Toplevel()
-            win.geometry("300x300")
-            win.configure(bg='#017A5E')
-            def on_enter(e):
-                location_name.delete(0, 'end')
-            def on_leave(e):
-                name = location_var.get()
-                if name == '':
-                    location_name.insert(0, 'location')
-
-            Label(win,text="Location Name",bg='#017A5E',font=(Font,20,'bold'),fg='black').place(x=60,y=5)
-            location_var=StringVar()
-            location_name=Entry(win,width=30, fg='black', border=0,bg='#70B6AC', font=('Trebuchet MS', 12),textvariable=location_var)
+    def on_enter(e):
+        location_name.delete(0, 'end')
+    def on_leave(e):
+        name = location_var.get()
+        if name == '':
             location_name.insert(0, 'location')
-            location_name.bind('<FocusIn>', on_enter)
-            location_name.bind('<FocusOut>', on_leave)
-            location_name.place(x=30,y=60)
 
-            confirm_btn=Button(win, text="Submit", bg='#CBFDF1', width=15, font=(Font, 10),activebackground="#CBFDF1",command=on_confirm)
-            confirm_btn.place(x=90,y=100)
-            win.mainloop()
-    else:
-        backend_funtions.create_button(name_id,root,canvas)
-        conn.close()
 
-database.location_map()
-conn=database.makeconnection()
-c=conn.cursor()
-c.execute("SELECT name FROM location_map")
-location=c.fetchall()
+    Label(win,text="Location Name",bg='#017A5E',font=(Font,20,'bold'),fg='black').place(x=60,y=5)
+    location_var=StringVar()
+    location_name=Entry(win,width=30, fg='black', border=0,bg='#70B6AC', font=('Trebuchet MS', 12),textvariable=location_var)
+    location_name.insert(0, 'location')
+    location_name.bind('<FocusIn>', on_enter)
+    location_name.bind('<FocusOut>', on_leave)
+    location_name.place(x=30,y=60)
 
-btn1=Button(root,cursor="hand2",text=location[0],height=3,width=20,background="#AEDCC4",font=(Font,10),command=lambda:ask_location(btn1,"Location_1"))
-btn1.place(x=30,y=250)
+    def on_enter_security(e):
+        code.delete(0, 'end')
+    def on_leave_security(e):
+        fetch= code.get()
+        if fetch == '':
+            code.insert(0, 'security code')
 
-btn2=Button(root,cursor="hand2",text=location[1],height=3,width=20,background="#AEDCC4",font=(Font,10),command=lambda:ask_location(btn2,"Location_2"))
-btn2.place(x=230,y=250)
+    code_var=StringVar()
+    code = Entry(win,width=30, fg='black', border=0,bg='#70B6AC', font=('Trebuchet MS', 12),textvariable=code_var)
+    code.place(x=30, y=100)
 
-btn3=Button(root,cursor="hand2",text=location[2],height=3,width=20,background="#AEDCC4",font=(Font,10),command=lambda:ask_location(btn3,"Location_3"))
-btn3.place(x=430,y=250)
+    code.insert(0, 'security code')
+    code.bind('<FocusIn>', on_enter_security)
+    code.bind('<FocusOut>', on_leave_security)
 
-btn4=Button(root,cursor="hand2",text=location[3],height=3,width=20,background="#AEDCC4",font=(Font,10),command=lambda:ask_location(btn4,"Location_4"))
-btn4.place(x=630,y=250)
+    confirm_btn=Button(win, text="Submit", bg='#CBFDF1', width=15, font=(Font, 10),activebackground="#CBFDF1",command=on_confirm)
+    confirm_btn.place(x=90,y=160)
 
-btn5=Button(root,cursor="hand2",text=location[4],height=3,width=20,background="#AEDCC4",font=(Font,10),command=lambda:ask_location(btn5,"Location_5"))
-btn5.place(x=30,y=330)
+    win.mainloop()
 
-btn6=Button(root,cursor="hand2",text=location[5],height=3,width=20,background="#AEDCC4",font=(Font,10),command=lambda:ask_location(btn6,"Location_6"))
-btn6.place(x=230,y=330)
+def update_positions(value,):
+    y_start = 60 - int(float(value))# Start position for frames 
+    var=0  
+    for i, frame in enumerate(frames):           
+        new_y = y_start + var*100  # Adjust each frame's y position based on the scale
+        if (i+1)%3==0:
+            var+=1 
+                         
+        frame.place_configure(y=new_y)  # Update the frame's position
 
-btn7=Button(root,cursor="hand2",text=location[6],height=3,width=20,background="#AEDCC4",font=(Font,10),command=lambda:ask_location(btn7,"Location_7"))
-btn7.place(x=430,y=330)
+location_frame=Frame()
 
-btn8=Button(root,cursor="hand2",text=location[7],height=3,width=20,background="#AEDCC4",font=(Font,10),command=lambda:ask_location(btn8,"Location_8"))
-btn8.place(x=630,y=330)
+frames=[]
+Button(root,text="Add",command=lambda:ask_location()).place(x=50,y=50)
 
-btn9=Button(root,cursor="hand2",text=location[8],height=3,width=20,background="#AEDCC4",font=(Font,10),command=lambda:ask_location(btn9,"Location_9"))
-btn9.place(x=30,y=410)
+loc = Frame(root,bg=cyan,height=535,width=600)#slider frame
+loc.place(x=50,y=240)
 
-btn10=Button(root,cursor="hand2",text=location[9],height=3,width=20,background="#AEDCC4",font=(Font,10),command=lambda:ask_location(btn10,"Location_10"))
-btn10.place(x=230,y=410)
+ 
+def create_location_buttons():
+    conn=database.makeconnection()
+    c=conn.cursor()
+    c.execute("SELECT name FROM location_map")
+    location=c.fetchall()
+    c.execute("SELECT id FROM location_map")
+    location_id=c.fetchall()
 
-btn11=Button(root,cursor="hand2",text=location[10],height=3,width=20,background="#AEDCC4",font=(Font,10),command=lambda:ask_location(btn11,"Location_11"))
-btn11.place(x=430,y=410)
+    for frame in frames:
+        frame.destroy()
+    frames.clear()
+    
+    y_axis=20
+    x_axis=30
+    ro=1
+    co=1
 
-btn12=Button(root,cursor="hand2",text=location[11],height=3,width=20,background="#AEDCC4",font=(Font,10),command=lambda:ask_location(btn12,"Location_12"))
-btn12.place(x=630,y=410)
+    for i in range(len(location)):
+        co+=1
+        frame = Frame(loc,bg='#EACF91',height=68,width=150)
+        frame.place(x=x_axis,y=y_axis)
+        if ro<3:
+            ro+=1
+            x_axis+=180
 
-btn13=Button(root,cursor="hand2",text=location[12],height=3,width=20,background="#AEDCC4",font=(Font,10),command=lambda:ask_location(btn13,"Location_13"))
-btn13.place(x=30,y=490)
+        else:
+            ro=1
+            y_axis+=100
+            x_axis=30
+            
+    
+        btn=Button(frame,cursor="hand2",text=location[i],height=3,width=20,background="#AEDCC4",font=(Font,10),command=lambda i=i: backend_funtions.create_button(location_id[i][0], root, canvas, canvas_var))
+        btn.place(x=0,y=0)
+        
 
-btn14=Button(root,cursor="hand2",text=location[13],height=3,width=20,background="#AEDCC4",font=(Font,10),command=lambda:ask_location(btn14,"Location_14"))
-btn14.place(x=230,y=490)
+        frames.append(frame)
 
-btn15=Button(root,cursor="hand2",text=location[14],height=3,width=20,background="#AEDCC4",font=(Font,10),command=lambda:ask_location(btn15,"Location_15"))
-btn15.place(x=430,y=490)
+    scale_float = DoubleVar(value=1)
+    scale=Scale(loc,
+                    bg='black',command=update_positions,
+                    fg='#EACF91',
+                    from_ = 0,
+                    to = len(location_id)*20,
+                    length = 500,
+                    orient = VERTICAL,
+                    variable=scale_float,
+                    )
 
-btn16=Button(root,cursor="hand2",text=location[15],height=3,width=20,background="#AEDCC4",font=(Font,10),command=lambda:ask_location(btn16,"Location_16"))
-btn16.place(x=630,y=490)
+    scale.place(x=550,y=20)
 
-btn17=Button(root,cursor="hand2",text=location[16],height=3,width=20,background="#AEDCC4",font=(Font,10),command=lambda:ask_location(btn17,"Location_17"))
-btn17.place(x=30,y=570)
-
-btn18=Button(root,cursor="hand2",text=location[17],height=3,width=20,background="#AEDCC4",font=(Font,10),command=lambda:ask_location(btn18,"Location_18"))
-btn18.place(x=230,y=570)
-
-btn19=Button(root,cursor="hand2",text=location[18],height=3,width=20,background="#AEDCC4",font=(Font,10),command=lambda:ask_location(btn19,"Location_19"))
-btn19.place(x=430,y=570)
-
-btn20=Button(root,cursor="hand2",text=location[19],height=3,width=20,background="#AEDCC4",font=(Font,10),command=lambda:ask_location(btn20,"Location_20"))
-btn20.place(x=630,y=570)
-
-btn21=Button(root,cursor="hand2",text=location[20],height=3,width=20,background="#AEDCC4",font=(Font,10),command=lambda:ask_location(btn21,"Location_21"))
-btn21.place(x=30,y=650)
-
-btn22=Button(root,cursor="hand2",text=location[21],height=3,width=20,background="#AEDCC4",font=(Font,10),command=lambda:ask_location(btn22,"Location_22"))
-btn22.place(x=230,y=650)
-
-btn23=Button(root,cursor="hand2",text=location[22],height=3,width=20,background="#AEDCC4",font=(Font,10),command=lambda:ask_location(btn23,"Location_23"))
-btn23.place(x=430,y=650)
-
-btn24=Button(root,cursor="hand2",text=location[23],height=3,width=20,background="#AEDCC4",font=(Font,10),command=lambda:ask_location(btn24,"Location_24"))
-btn24.place(x=630,y=650)
 
 locations=canvas.create_text(140, 40, text="Locations", font=(Font, 30, "bold"), fill=cyan)
 canvas.coords(locations, 400, 180)
 
-root.mainloop()
+database.location_map()
+create_location_buttons()

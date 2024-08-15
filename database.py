@@ -38,16 +38,8 @@ def location_map():
 
     except:
         c.execute(f"CREATE TABLE IF NOT EXISTS location_map(id TEXT NOT NULL,name TEXT)")
-        lst=[("Location_1","ADD"),("Location_2","ADD"),("Location_3","ADD"),("Location_4","ADD")
-             ,("Location_5","ADD"),("Location_6","ADD"),("Location_7","ADD"),("Location_8","ADD")
-             ,("Location_9","ADD"),("Location_10","ADD"),("Location_11","ADD"),("Location_12","ADD"),
-             ("Location_13","ADD"),("Location_14","ADD"),("Location_15","ADD"),("Location_16","ADD"),
-             ("Location_17","ADD"),("Location_18","ADD"),("Location_19","ADD"),("Location_20","ADD"),
-             ("Location_21","ADD"),("Location_22","ADD"),("Location_23","ADD"),("Location_24","ADD")]
-        c.executemany(f"INSERT INTO location_map(id,name) VALUES(?,?)",lst)
         conn.commit()
         conn.close()
-
 
 def location_table(location):
     conn=makeconnection()

@@ -248,6 +248,8 @@ canvas.create_image(0, 0, image=root_photo, anchor="nw")
 
 canvas_var=canvas.create_text(1170,170,text=' ',font=(Font, 40, "bold"), fill=cyan)
 
+
+
 logo_image=Image.open("resources/logo.png")
 photo=ImageTk.PhotoImage(logo_image.resize((70,70)))
 canvas.create_image(35, 35, image=photo, anchor="nw")

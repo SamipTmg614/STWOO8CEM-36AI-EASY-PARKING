@@ -38,13 +38,6 @@ def location_map():
 
     except:
         c.execute(f"CREATE TABLE IF NOT EXISTS location_map(id TEXT NOT NULL,name TEXT)")
-        lst=[("Location_1","ADD"),("Location_2","ADD"),("Location_3","ADD"),("Location_4","ADD")
-             ,("Location_5","ADD"),("Location_6","ADD"),("Location_7","ADD"),("Location_8","ADD")
-             ,("Location_9","ADD"),("Location_10","ADD"),("Location_11","ADD"),("Location_12","ADD"),
-             ("Location_13","ADD"),("Location_14","ADD"),("Location_15","ADD"),("Location_16","ADD"),
-             ("Location_17","ADD"),("Location_18","ADD"),("Location_19","ADD"),("Location_20","ADD"),
-             ("Location_21","ADD"),("Location_22","ADD"),("Location_23","ADD"),("Location_24","ADD")]
-        c.executemany(f"INSERT INTO location_map(id,name) VALUES(?,?)",lst)
         conn.commit()
         conn.close()
 
@@ -156,5 +149,87 @@ def update_code(code):
     c.execute('''UPDATE security_code
                 SET passcode=?
                 WHERE passcode=?''',(code,current_code))
+    conn.commit()
+    conn.close()
+
+def make_space_countingtables(name,occ,empty,namea):
+    conn = makeconnection()
+    c = conn.cursor()
+    try:
+        c.execute('''UPDATE countings SET booked=?, empty=? ,location_name =? WHERE locationname=?''', (occ, empty, name,namea))
+        if c.rowcount == 0:
+            c.execute("""INSERT INTO countings (locationname, booked, empty,location_name) VALUES (?, ?, ?,?)""", (name, occ, empty,namea))
+    except sqlite3.Error as e:
+        print(f'Update or Insert failed: {e}')
+    finally:
+        conn.commit()
+        conn.close()
+
+def make_counting_table():
+    conn = makeconnection()
+    c = conn.cursor()
+    c.execute('''CREATE TABLE IF NOT EXISTS countings(locationname TEXT , booked integer,empty integer,location_name TEXT)''')
+    conn.commit()
+    conn.close()
+    
+
+
+def get_info_forfrontend(name):
+    conn = makeconnection()
+    c = conn.cursor()
+    c.execute("SELECT * FROM countings WHERE locationname = ?", (name,))
+    details=c.fetchall()
+    # print (details)
+    return details
+
+
+def give_info_for_location():
+    make_counting_table()
+    conn = makeconnection()
+    c = conn.cursor()
+
+    c.execute("SELECT id,name FROM location_map WHERE name != ?", ('ADD',))
+
+    loc_name=c.fetchall()
+    infos = []
+
+    for loc in loc_name:
+        loc_name=loc[1]
+        z=0
+        lst=[]
+        table_name = loc[0]
+        c.execute(f"SELECT * FROM countings WHERE locationname=?",(table_name,))
+        det=c.fetchall()
+
+        if not det:
+            det=[(0,0,0)]
+        falses=[]
+        c.execute(f"SELECT status FROM {table_name} WHERE status = ?", ('FALSE',))
+        a=c.fetchall()
+        falses.append(a)
+        # break
+        occ_count=len(falses[0])
+
+        c.execute(f"SELECT * FROM {table_name} WHERE status = ?", ('TRUE',))
+        lst.append(c.fetchall())
+        rem_count=len(lst[0])
+
+        # parked_time = calculate_time()
+        # print(parked_time)
+        make_space_countingtables(loc[0],occ_count,rem_count,loc_name)
+    
+        d = get_info_forfrontend(loc[0])  
+        infos.append(d)  
+    conn.close()
+    return infos
+
+def add_location(name):
+    conn=makeconnection()
+    c=conn.cursor()
+    c.execute("SELECT name FROM location_map")
+    length=c.fetchall()
+
+    number=len(length)+1
+    c.execute("INSERT INTO location_map(name,id) VALUES(?,?)",(name,f"Location_"+str(number)))
     conn.commit()
     conn.close()

@@ -50,18 +50,8 @@ def location_table(location):
         c.execute(f"SELECT * FROM {location}")
 
     except :
-        lst=[('1','ADD'),('2','ADD'),('3','ADD'),('4','ADD'),('5','ADD'),('6','ADD'),('7','ADD'),('8','ADD'),('9','ADD'),
-             ('10','ADD'),('11','ADD'),('12','ADD'),('13','ADD'),('14','ADD'),('15','ADD'),('16','ADD'),('17','ADD'),('18','ADD'),
-             ('19','ADD'),('20','ADD'),('21','ADD'),('22','ADD'),('23','ADD'),('24','ADD'),('25','ADD'),('26','ADD'),('27','ADD'),
-             ('28','ADD'),('29','ADD'),('30','ADD'),('31','ADD'),('32','ADD'),('33','ADD'),('34','ADD'),('35','ADD'),('36','ADD'),('37','ADD'),
-             ('38','ADD'),('39','ADD'),('40','ADD'),('41','ADD'),('42','ADD'),('43','ADD'),('44','ADD'),('45','ADD'),('46','ADD'),('47','ADD'),('48','ADD'),
-             ('49','ADD'),('50','ADD'),('51','ADD'),('52','ADD'),('53','ADD'),('54','ADD'),('55','ADD'),('56','ADD'),('57','ADD'),('58','ADD'),('59','ADD'),
-             ('60','ADD'),('61','ADD'),('62','ADD'),('63','ADD'),('64','ADD'),('65','ADD'),('66','ADD'),('67','ADD'),('68','ADD'),('69','ADD'),('70','ADD'),
-             ('71','ADD'),('72','ADD'),('73','ADD'),('74','ADD'),('75','ADD'),('76','ADD'),('77','ADD'),('78','ADD'),('79','ADD'),('80','ADD'),('81','ADD'),('82','ADD'),
-             ('83','ADD'),('84','ADD'),('85','ADD'),('86','ADD'),('87','ADD'),('88','ADD'),('89','ADD'),('90','ADD')]
         c.execute(f'''CREATE TABLE IF NOT EXISTS {location}(id TEXT PRIMARY KEY NOT NULL,status TEXT NOT NULL,model TEXT,number TEXT,
                   minute INTEGER,hour INTEGER,year INTEGER,month INTEGER,day INTEGER)''')
-        c.executemany(f"INSERT INTO {location}(id,status) VALUES(?,?)",lst)
         conn.commit()
     conn.close()
 
@@ -242,12 +232,6 @@ def give_info_for_location():
     conn.close()
 
     return infos
-
-        # break
-
-
-
-# give_info_for_location()
     
 def add_location(name):
     conn=makeconnection()
@@ -257,5 +241,12 @@ def add_location(name):
 
     number=len(length)+1
     c.execute("INSERT INTO location_map(name,id) VALUES(?,?)",(name,f"Location_"+str(number)))
+    conn.commit()
+    conn.close()
+
+def add_slot(number,location):
+    conn=makeconnection()
+    c=conn.cursor()
+    c.execute(f"INSERT INTO {location} (id,status) VALUES(?,?)",(number,"TRUE"))
     conn.commit()
     conn.close()

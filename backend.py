@@ -239,7 +239,7 @@ black="black"
 white="white"
 Font="Trebuchet MS"
 
-root_image = Image.open("clear_bg.jpeg")
+root_image = Image.open("resources/clear_bg.jpeg")
 root_photo = ImageTk.PhotoImage(root_image.resize((1920, 880)))
 
 canvas = Canvas(root, width=1920, height=880)
@@ -248,7 +248,7 @@ canvas.create_image(0, 0, image=root_photo, anchor="nw")
 
 canvas_var=canvas.create_text(1170,170,text=' ',font=(Font, 40, "bold"), fill=cyan)
 
-logo_image=Image.open("logo.png")
+logo_image=Image.open("resources/logo.png")
 photo=ImageTk.PhotoImage(logo_image.resize((70,70)))
 canvas.create_image(35, 35, image=photo, anchor="nw")
 
@@ -397,3 +397,5 @@ canvas.coords(locations, 400, 180)
 
 database.location_map()
 create_location_buttons()
+
+root.mainloop()

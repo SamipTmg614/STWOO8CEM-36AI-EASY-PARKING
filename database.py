@@ -157,3 +157,113 @@ def update_code(code):
                 WHERE passcode=?''',(code,current_code))
     conn.commit()
     conn.close()
+
+def calculate_time_ofuser(id,location):
+    conn=makeconnection()
+    c=conn.cursor()
+    c.execute(f"SELECT year FROM {location} WHERE user=?",(id,))
+    year=c.fetchone()
+    c.execute(f"SELECT month FROM {location} WHERE user=?",(id,))
+    month=c.fetchone()
+    c.execute(f"SELECT day FROM {location} WHERE user=?",(id,))
+    day=c.fetchone()
+    c.execute(f"SELECT hour FROM {location} WHERE user=?",(id,))
+    hour=c.fetchone()
+    c.execute(f"SELECT minute FROM {location} WHERE user=?",(id,))
+    minute=c.fetchone()
+    current_time=datetime.now()
+    entry_time=datetime(year[0],month[0],day[0],hour[0],minute[0])
+    difference=current_time-entry_time
+    total_minutes=int(difference.total_seconds()/60)
+    conn.close()
+    return total_minutes
+
+
+def make_space_countingtables(name,occ,empty,namea):
+    conn = makeconnection()
+    c = conn.cursor()
+    try:
+        c.execute('''UPDATE countings SET booked=?, empty=? ,location_name =? WHERE locationname=?''', (occ, empty, name,namea))
+        if c.rowcount == 0:
+            c.execute("""INSERT INTO countings (locationname, booked, empty,location_name) VALUES (?, ?, ?,?)""", (name, occ, empty,namea))
+    except sqlite3.Error as e:
+        print(f'Update or Insert failed: {e}')
+    finally:
+        conn.commit()
+        conn.close()
+
+def make_counting_table():
+    conn = makeconnection()
+    c = conn.cursor()
+    c.execute('''CREATE TABLE IF NOT EXISTS countings(locationname TEXT , booked integer,empty integer,location_name TEXT)''')
+    conn.commit()
+    conn.close()
+    
+
+
+def get_info_forfrontend(name):
+    conn = makeconnection()
+    c = conn.cursor()
+    c.execute("SELECT * FROM countings WHERE locationname = ?", (name,))
+    details=c.fetchall()
+    # print (details)
+    return details
+
+
+def give_info_for_location():
+    make_counting_table()
+    conn = makeconnection()
+    c = conn.cursor()
+
+    c.execute("SELECT id,name FROM location_map WHERE name != ?", ('ADD',))
+
+    loc_name=c.fetchall()
+    infos = []
+
+    for loc in loc_name:
+        loc_name=loc[1]
+        z=0
+        lst=[]
+        table_name = loc[0]
+        c.execute(f"SELECT * FROM countings WHERE locationname=?",(table_name,))
+        det=c.fetchall()
+
+        if not det:
+            det=[(0,0,0)]
+        falses=[]
+        c.execute(f"SELECT status FROM {table_name} WHERE status = ?", ('FALSE',))
+        a=c.fetchall()
+        falses.append(a)
+        # break
+        occ_count=len(falses[0])
+
+        c.execute(f"SELECT * FROM {table_name} WHERE status = ?", ('TRUE',))
+        lst.append(c.fetchall())
+        rem_count=len(lst[0])
+
+        # parked_time = calculate_time()
+        # print(parked_time)
+        make_space_countingtables(loc[0],occ_count,rem_count,loc_name)
+    
+        d = get_info_forfrontend(loc[0])  
+        infos.append(d)  
+    conn.close()
+
+    return infos
+
+        # break
+
+
+
+# give_info_for_location()
+    
+def add_location(name):
+    conn=makeconnection()
+    c=conn.cursor()
+    c.execute("SELECT name FROM location_map ")
+    length=c.fetchall()
+
+    number=len(length)+1
+    c.execute("INSERT INTO location_map(name,id) VALUES(?,?)",(name,f"Location_"+str(number)))
+    conn.commit()
+    conn.close()

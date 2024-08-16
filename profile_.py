@@ -18,18 +18,18 @@ def profile_infos(data,a):
     email = data[0][3]
     passw = data[0][4]
     name = Label(root,text=user_name, fg='white',bg='black',font=('Trebuchet MS', 23))
-    name.place(x=215,y=120,height=23)
+    name.place(x=150,y=120,height=23)
 
-    Label(root,text='full_name', fg='black',bg='#70B6AC', font=('Trebuchet MS', 15)).place(x=20,y=170,height=23)
-    Label(root,text=full_name, fg='black',bg='#70B6AC',font=('Trebuchet MS', 15)).place(x=150,y=170,height=23)
+    Label(root,text='Name:', fg='black',bg='#70B6AC', font=('Trebuchet MS', 15)).place(x=20,y=170,height=23)
+    Label(root,text=full_name, fg='black',bg='#70B6AC',font=('Trebuchet MS', 15)).place(x=170,y=170,height=23)
 
-    Label(root,text='phone number', fg='black',bg='#70B6AC', font=('Trebuchet MS', 15)).place(x=20,y=210,height=23)
+    Label(root,text='Phone number:', fg='black',bg='#70B6AC', font=('Trebuchet MS', 15)).place(x=20,y=210,height=23)
     number=Label(root,text=phone_number, fg='black',bg='#70B6AC',font=('Trebuchet MS', 15))
-    number.place(x=150,y=210,height=23)
+    number.place(x=170,y=210,height=23)
 
-    Label(root,text='email', fg='black',bg='#70B6AC',font=('Trebuchet MS', 15)).place(x=20,y=250,height=23)
+    Label(root,text='Email:', fg='black',bg='#70B6AC',font=('Trebuchet MS', 15)).place(x=20,y=250,height=23)
     mail=Label(root,text=email, fg='black',bg='#70B6AC', font=('Trebuchet MS', 15))
-    mail.place(x=150,y=250,height=23)
+    mail.place(x=170,y=250,height=23)
 
 
     def logout():
@@ -49,7 +49,7 @@ def profile_infos(data,a):
         win.resizable(False, False)
 
 
-        label_menu = Label(win, text="Select an option:")
+        label_menu = Label(win, text="Select an option:",bg='#70B6AC')
         label_menu.pack(pady=5)
 
         # Dropdown menu
@@ -61,7 +61,7 @@ def profile_infos(data,a):
         dropdown.pack(pady=5)
 
         # Label for entry box
-        label_entry = Label(win, text="Enter text:")
+        label_entry = Label(win, text="Enter text:",bg='#70B6AC')
         label_entry.pack(pady=5)
 
         # Entry box
@@ -107,4 +107,4 @@ def profile_infos(data,a):
 
     root.mainloop()
 
-# profile_infos([('a','a','a','a')])
+# profile_infos([('a','a','a','a','a')],'a') 

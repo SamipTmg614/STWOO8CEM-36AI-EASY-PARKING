@@ -21,8 +21,7 @@ def register_user():
     passw= passworda.get()
     database.add_user(user,fullname,phone,email,passw)
     messagebox.showinfo('success','registered succesfully')
-    root.destroy()
-    import new_main
+    back()
 
 def check_password():
     passw = False

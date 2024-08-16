@@ -61,6 +61,7 @@ def get_user(username,password):
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM users WHERE username=? And password =? ",(username,password))
     result = cursor.fetchall()
+    conn.close()
     return result
 
 def get_manager(id,password):
@@ -68,6 +69,7 @@ def get_manager(id,password):
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM managers WHERE id=? and password=?",(id,password))
     result=cursor.fetchall()
+    conn.close()
     return result
 
 def add_user(username,name,phone,email,password):
@@ -188,6 +190,7 @@ def get_info_forfrontend(name):
     c = conn.cursor()
     c.execute("SELECT * FROM countings WHERE locationname = ?", (name,))
     details=c.fetchall()
+    conn.close()
     # print (details)
     return details
 

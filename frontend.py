@@ -112,4 +112,4 @@ def frontpage(details):
     scale.place(x=640,y=190)
 
     root.mainloop()
-frontpage('a')
+# frontpage('a')

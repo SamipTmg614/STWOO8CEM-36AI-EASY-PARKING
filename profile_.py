@@ -35,7 +35,6 @@ def profile_infos(data,a):
     def logout():
         a.destroy()
         subprocess.Popen([sys.executable, 'new_main.py'])
-        root.destroy()
 
     btn = Button(root,width=20,bg='#325971',text='logout',command=logout)
     btn.place(x=290,y=400,height=37)
@@ -91,7 +90,10 @@ def profile_infos(data,a):
             else:
                 data=database.get_user(user_name,passw)
                 number.configure(text=f'{entry_box.get()}')
-            win.destroy()
+            # win.destroy()
+            root.destroy()
+            profile_infos(data,a)
+
 
 
         submit_button = Button(win, text="Submit", command=submit)

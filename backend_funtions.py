@@ -59,7 +59,7 @@ def check_slot(button,x,location):
         c.execute(f"SELECT hour FROM {location} WHERE id=?",(x,))
         hour=c.fetchone()
 
-        price=database.calculate_time(x,location)
+        price=database.calculate_amt(x,location)
         time_label=f"{hour[0]}:{minute[0]}"
         Label(win,text=f"Entry Time:{time_label}",bg='#70B6AC',width=23,font=('Trebuchet MS',12),fg='black').place(x=40,y=110)
         Label(win,text=f"Price:{price}",bg='#70B6AC',width=23,font=('Trebuchet MS',12),fg='black').place(x=40,y=135)

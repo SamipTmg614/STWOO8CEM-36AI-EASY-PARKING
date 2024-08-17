@@ -246,6 +246,7 @@ def add_location(name):
     c.execute("INSERT INTO location_map(name,id) VALUES(?,?)",(name,f"Location_"+str(number)))
     conn.commit()
     conn.close()
+    location_table(f"Location_"+str(number))
 
 def add_slot(number,location):
     conn=makeconnection()

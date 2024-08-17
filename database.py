@@ -88,7 +88,7 @@ def add_manager(id,password):
     conn.commit()
     conn.close()
 
-def calculate_time(id,location):
+def calculate_amt(id,location):
     conn=makeconnection()
     c=conn.cursor()
     c.execute(f"SELECT year FROM {location} WHERE id=?",(id,))
@@ -106,7 +106,14 @@ def calculate_time(id,location):
     difference=current_time-entry_time
     total_minutes=int(difference.total_seconds()/60)
     conn.close()
-    return total_minutes
+    amt=15
+    if total_minutes >0 and total_minutes<60:
+        amt = 15
+    elif total_minutes>=60:
+        halfour = total_minutes//30
+        amt = halfour*12.5
+
+    return amt
 
 def delete_manager(id):
     conn=makeconnection()
@@ -141,27 +148,6 @@ def update_code(code):
                 WHERE passcode=?''',(code,current_code))
     conn.commit()
     conn.close()
-
-def calculate_time_ofuser(id,location):
-    conn=makeconnection()
-    c=conn.cursor()
-    c.execute(f"SELECT year FROM {location} WHERE user=?",(id,))
-    year=c.fetchone()
-    c.execute(f"SELECT month FROM {location} WHERE user=?",(id,))
-    month=c.fetchone()
-    c.execute(f"SELECT day FROM {location} WHERE user=?",(id,))
-    day=c.fetchone()
-    c.execute(f"SELECT hour FROM {location} WHERE user=?",(id,))
-    hour=c.fetchone()
-    c.execute(f"SELECT minute FROM {location} WHERE user=?",(id,))
-    minute=c.fetchone()
-    current_time=datetime.now()
-    entry_time=datetime(year[0],month[0],day[0],hour[0],minute[0])
-    difference=current_time-entry_time
-    total_minutes=int(difference.total_seconds()/60)
-    conn.close()
-    return total_minutes
-
 
 def make_space_countingtables(name,occ,empty,namea):
     conn = makeconnection()

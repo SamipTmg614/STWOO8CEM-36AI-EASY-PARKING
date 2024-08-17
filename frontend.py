@@ -82,13 +82,6 @@ def frontpage(details):
         createFrame(frame)
 
         yaxis+=125
-        try:
-            totalmoney = database.calculate_time(user_name,location)
-            print(totalmoney)
-        except:
-            print('failed')
-        else:
-            ...
 
         frames.append(frame)
     def update_positions(value,):

@@ -57,7 +57,6 @@ def check_password():
 def phone():
         valid = NONE
         len_phone=phone_number.get()
-
         def check_isdigit():
             nonlocal len_phone
 
@@ -101,16 +100,18 @@ def check_details():
     passwa = passworda.get()
     passwb = passwordb.get()
 
+    if user == 'Username':
+        messagebox.showerror('error','all details must be filled!')
     if phone()==True:
         if check_email()==True:
             if passwa==passwb:
                 if check_password() == True:
                     if database.get_user(user,passwa):
-                        messagebox.showerror('username','username already exists')
+                        messagebox.showerror('error','username already exists')
                     else:
                         register_user()
                 else:
-                    print("error at 97")
+                    ...
 
             else:
                 messagebox.showerror('error','passwords do not match')

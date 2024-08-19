@@ -3,6 +3,7 @@ from tkinter import messagebox
 import database
 import subprocess,sys
 import frontend
+from PIL import Image,ImageTk
 #Function to open manager interface
 def manager_interface():
     win = Toplevel()
@@ -222,7 +223,7 @@ def customer_interface():#Function to open customer interface
         name = username.get()
         if name == '':
             username.insert(0, 'Username')
-    # Label(frame,text='username').place(x=150,y=10)
+
     username = Entry(frame,width=25, fg='black', border=0,bg='#70B6AC', font=('Trebuchet MS', 11),textvariable=StringVar)
     username.place(x=30, y=80)
     username.insert(0, 'Username')
@@ -267,16 +268,17 @@ root.after(10, lambda: root.lift())
 root.after(10, lambda: root.attributes('-topmost', True))
 root.after(100, lambda: root.attributes('-topmost', False))
 
-img = PhotoImage(file='resources/mainbg.png',)
-Label(root, image=img, bg='white').pack()
+home_image=Image.open("resources/homepage.png")
+photo=ImageTk.PhotoImage(home_image.resize((1620,880)))
+Label(root, image=photo, bg='white').pack()
 logo_lbl=Label(text="Car Parking",font=("courier",40,"bold")).pack()#Label for logo
 
-manager_button=Button(text="Manager",font=("courier",30,"bold"),width=10,height=2,bg="black",fg="white",
+manager_button=Button(text="Manager",font=("courier",30,"bold"),width=11,height=1,bg="black",fg="white",
                       command=manager_interface)#Button to call manager_interface function
-manager_button.place(x=300,y=350)
+manager_button.place(x=210,y=485)
 
-user_button=Button(text="Customer",font=("courier",30,"bold"),width=10,height=2,bg="black",fg="white",
+user_button=Button(text="Customer",font=("courier",30,"bold"),width=11,height=1,bg="black",fg="white",
                    command=customer_interface)#Button to call customer_interface function
-user_button.place(x=950,y=350)
+user_button.place(x=1095,y=485)
 
 root.mainloop()

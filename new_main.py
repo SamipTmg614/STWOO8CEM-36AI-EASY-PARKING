@@ -256,9 +256,6 @@ def customer_interface():#Function to open customer interface
     Button(frame, width=5,padx=0, pady=0, text='signup', bg='#70B6AC', fg='black', border=0,command=signup).place(x=45,y=280)
     Button(frame, width=20,padx=0, pady=0, text='forgot password', bg='#70B6AC', fg='black', border=0,command=forgot_pass).place(x=190,y=200)
 
-
-
-
     win.mainloop()                                           
 
 root=Tk()

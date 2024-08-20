@@ -36,7 +36,7 @@ def register_manager():
     win=Toplevel()
     win.geometry("300x300")
     win.configure(bg='#017A5E')
-    Label(win,text="Add Manager",bg='#017A5E',font=(Font,20,'bold'),fg='black').place(x=50,y=10)
+    Label(win,text="Add Manager",bg='#017A5E',font=("Trebuchet MS",20,'bold'),fg='black').place(x=50,y=10)
 
     def on_enter_name(e):
         name.delete(0, 'end')
@@ -84,7 +84,7 @@ def register_manager():
     security.bind('<FocusIn>', on_enter_security)
     security.bind('<FocusOut>', on_leave_security)
 
-    button = Button(win, text="Submit", bg='#CBFDF1', width=15, font=(Font, 10),activebackground="#CBFDF1",command=enter_manager)
+    button = Button(win, text="Submit", bg='#CBFDF1', width=15, font=("Trebuchet MS", 10),activebackground="#CBFDF1",command=enter_manager)
     button.place(x=80, y=220)
     win.mainloop()
 
@@ -93,7 +93,6 @@ def remove_manager():
     def check_manager():
         conn=database.makeconnection()
         c=conn.cursor()
-
         user=name.get()
         passw=password.get()
         security=code.get()
@@ -121,8 +120,9 @@ def remove_manager():
 
     win=Toplevel()
     win.geometry("300x300")
+    win.title("Easy Parking")
     win.configure(bg='#017A5E')
-    Label(win,text="Remove Manger",bg='#017A5E',font=(Font,20,'bold'),fg='black').place(x=50,y=10)
+    Label(win,text="Remove Manger",bg='#017A5E',font=("Trebuchet MS",20,'bold'),fg='black').place(x=50,y=10)
 
     def on_enter_Name(e):
         name.delete(0, 'end')
@@ -170,7 +170,7 @@ def remove_manager():
     code.bind('<FocusIn>', on_enter_security)
     code.bind('<FocusOut>', on_leave_security)
 
-    button = Button(win, text="Submit", bg='#CBFDF1', width=15, font=(Font, 10),activebackground="#CBFDF1",command=check_manager)
+    button = Button(win, text="Submit", bg='#CBFDF1', width=15, font=("Trebuchet MS", 10),activebackground="#CBFDF1",command=check_manager)
     button.place(x=100, y=220)
     win.mainloop()
     
@@ -187,8 +187,9 @@ def security_code():
             messagebox.showinfo("Alert","Incorrect current code!!")
     win=Toplevel()
     win.geometry("300x300")
+    win.title("Easy Parking")
     win.configure(bg='#017A5E')
-    Label(win,text="Edit Security Code",bg='#017A5E',font=(Font,20,'bold'),fg='black').place(x=40,y=10)
+    Label(win,text="Edit Security Code",bg='#017A5E',font=("Trebuchet MS",20,'bold'),fg='black').place(x=40,y=10)
 
     def on_enter_current(e):
         current_code.delete(0, 'end')
@@ -219,9 +220,8 @@ def security_code():
     new_code.bind('<FocusIn>', on_enter_new)
     new_code.bind('<FocusOut>', on_leave_new)
 
-    button = Button(win, text="Submit", bg='#CBFDF1', width=15, font=(Font, 10),activebackground="#CBFDF1",command=on_confirm)
+    button = Button(win, text="Submit", bg='#CBFDF1', width=15, font=("Trebuchet MS", 10),activebackground="#CBFDF1",command=on_confirm)
     button.place(x=100, y=180)
-
 
     win.mainloop()
 
@@ -231,13 +231,12 @@ def Logout():
     subprocess.Popen([sys.executable, 'manager_interface.py'])
 
 
-  
 root=Tk()
 root.geometry("1920x880")
-cyan="#70B6AC"
-black="black"
-white="white"
-Font="Trebuchet MS"
+root.after(10, lambda: root.focus_force())
+root.after(10, lambda: root.lift())
+root.after(10, lambda: root.attributes('-topmost', True))
+root.after(100, lambda: root.attributes('-topmost', False))
 
 root_image = Image.open("resources/clear_bg.jpeg")
 root_photo = ImageTk.PhotoImage(root_image.resize((1920, 880)))
@@ -245,32 +244,28 @@ root_photo = ImageTk.PhotoImage(root_image.resize((1920, 880)))
 canvas = Canvas(root, width=1920, height=880)
 canvas.pack(fill="both", expand=True)
 canvas.create_image(0, 0, image=root_photo, anchor="nw")
-
-canvas_var=canvas.create_text(1170,170,text=' ',font=(Font, 40, "bold"), fill=cyan)
-
-
+canvas_var=canvas.create_text(1170,170,text=' ',font=("Trebuchet MS", 40, "bold"), fill="#70B6AC")
 
 logo_image=Image.open("resources/logo.png")
 photo=ImageTk.PhotoImage(logo_image.resize((70,70)))
 canvas.create_image(35, 35, image=photo, anchor="nw")
 
-name=canvas.create_text(140, 40, text="Easy Parking", font=(Font, 40, "bold"), fill=cyan)
+name=canvas.create_text(140, 40, text="Easy Parking", font=("Trebuchet MS", 40, "bold"), fill="#70B6AC")
 canvas.coords(name, 270, 65)
 
 Frame(root, width=1920, height=2, bg='white').place(x=0, y=120)
 Frame(root, width=2, height=800, bg='white').place(x=800, y=120)
 
-add_manager=Button(text="Add Manager",cursor="hand2",bg=cyan,fg=black,font=(Font,10),width=14,command=register_manager)
+add_manager=Button(text="Add Manager",cursor="hand2",bg="#70B6AC",fg="black",font=("Trebuchet MS",10),width=14,command=register_manager)
 add_manager.place(x=1090,y=43)
 
-delete_manager=Button(text="Remove Manager",cursor="hand2",bg=cyan,fg=black,font=(Font,10),width=16,command=remove_manager)
+delete_manager=Button(text="Remove Manager",cursor="hand2",bg="#70B6AC",fg="black",font=("Trebuchet MS",10),width=16,command=remove_manager)
 delete_manager.place(x=1203,y=43)
 
-security=Button(text="Security Code",cursor="hand2",bg=cyan,fg=black,font=(Font,10),width=15,command=security_code)
+security=Button(text="Security Code",cursor="hand2",bg="#70B6AC",fg="black",font=("Trebuchet MS",10),width=15,command=security_code)
 security.place(x=1330,y=43)
 
-
-logout=Button(text="Logout",cursor="hand2",bg=cyan,fg=black,font=(Font,10),width=8,command=Logout)
+logout=Button(text="Logout",cursor="hand2",bg="#70B6AC",fg="black",font=("Trebuchet MS",10),width=8,command=Logout)
 logout.place(x=1450,y=43)
 
 
@@ -284,10 +279,11 @@ def ask_location():
             win.destroy()
         else:
             messagebox.showerror("Alert","Wrong Code",parent=win)
+
     win=Toplevel()
     win.geometry("300x300")
+    win.title("Easy Parking")
     win.configure(bg='#017A5E')
-
     def on_enter(e):
         location_name.delete(0, 'end')
     def on_leave(e):
@@ -295,8 +291,7 @@ def ask_location():
         if name == '':
             location_name.insert(0, 'location')
 
-
-    Label(win,text="Location Name",bg='#017A5E',font=(Font,20,'bold'),fg='black').place(x=60,y=5)
+    Label(win,text="Location Name",bg='#017A5E',font=("Trebuchet MS",20,'bold'),fg='black').place(x=60,y=5)
     location_var=StringVar()
     location_name=Entry(win,width=30, fg='black', border=0,bg='#70B6AC', font=('Trebuchet MS', 12),textvariable=location_var)
     location_name.insert(0, 'location')
@@ -310,18 +305,15 @@ def ask_location():
         fetch= code.get()
         if fetch == '':
             code.insert(0, 'security code')
-
     code_var=StringVar()
     code = Entry(win,width=30, fg='black', border=0,bg='#70B6AC', font=('Trebuchet MS', 12),textvariable=code_var)
     code.place(x=30, y=100)
-
     code.insert(0, 'security code')
     code.bind('<FocusIn>', on_enter_security)
     code.bind('<FocusOut>', on_leave_security)
 
-    confirm_btn=Button(win, text="Submit", bg='#CBFDF1', width=15, font=(Font, 10),activebackground="#CBFDF1",command=on_confirm)
+    confirm_btn=Button(win, text="Submit", bg='#CBFDF1', width=15, font=("Trebuchet MS",10),activebackground="#CBFDF1",command=on_confirm)
     confirm_btn.place(x=90,y=160)
-
     win.mainloop()
 
 def update_positions(value,):
@@ -334,12 +326,10 @@ def update_positions(value,):
                          
         frame.place_configure(y=new_y)  # Update the frame's position
 
-location_frame=Frame()
-
 frames=[]
-Button(text="Add Location",cursor="hand2",bg=cyan,fg=black,font=(Font,10),width=14,command=lambda:ask_location()).place(x=650,y=140)
+Button(text="Add Location",cursor="hand2",bg="#70B6AC",fg="black",font=("Trebuchet MS",10),width=14,command=lambda:ask_location()).place(x=650,y=140)
 
-loc = Frame(root,bg=cyan,height=535,width=600)#slider frame
+loc = Frame(root,bg="#70B6AC",height=535,width=600)#slider frame
 loc.place(x=50,y=240)
 
  
@@ -374,7 +364,7 @@ def create_location_buttons():
             x_axis=30
             
     
-        btn=Button(frame,cursor="hand2",text=location[i],height=3,width=20,background="#AEDCC4",font=(Font,10),command=lambda i=i: backend_funtions.create_button(location_id[i][0], root, canvas, canvas_var))
+        btn=Button(frame,cursor="hand2",text=location[i],height=3,width=20,background="#AEDCC4",font=("Trebuchet MS",10),command=lambda i=i: backend_funtions.create_button(location_id[i][0], root, canvas, canvas_var))
         btn.place(x=0,y=0)
         
 
@@ -394,7 +384,7 @@ def create_location_buttons():
     scale.place(x=550,y=20)
 
 
-locations=canvas.create_text(140, 40, text="Locations", font=(Font, 30, "bold"), fill=cyan)
+locations=canvas.create_text(140, 40, text="Locations", font=("Trebuchet MS", 30, "bold"), fill="#70B6AC")
 canvas.coords(locations, 400, 180)
 
 database.location_map()

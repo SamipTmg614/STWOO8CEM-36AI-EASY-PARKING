@@ -84,7 +84,6 @@ def add_manager(id,password):
     conn = makeconnection()
     cursor = conn.cursor()
     cursor.execute("INSERT INTO managers VALUES(?,?)",(id,password))
-
     conn.commit()
     conn.close()
 

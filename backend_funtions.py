@@ -39,43 +39,19 @@ def check_slot(button,x,location):
     database.location_table(location)
     conn=database.makeconnection()
     c=conn.cursor()
+    win=Toplevel()
+    win.geometry("300x300")
+    win.configure(bg='#017A5E')
+    win.title("Easy Parking")
 
     #Code to change the colour and text of the button according to the status
     c.execute(f"SELECT status from {location} WHERE id=?",(x,))
     status=c.fetchone()
-    if status[0]=="FALSE":
-        win=Toplevel()
-        win.geometry("300x300")
-        win.configure(bg='#017A5E')
-        c.execute(f"SELECT model,number FROM {location} WHERE id=?",(x,))
-        details=c.fetchmany()
-
-        Label(win,text="Details",bg='#017A5E',font=('Trebuchet MS',20,'bold'),fg='black').place(x=100,y=5)
-        Label(win,text=f"Model:{details[0][0]}",bg='#70B6AC',width=23,font=('Trebuchet MS',12),fg='black').place(x=40,y=60)
-        Label(win,text=f"Number:{details[0][1]}",bg='#70B6AC',width=23,font=('Trebuchet MS',12),fg='black').place(x=40,y=85)
-
-        c.execute(f"SELECT minute FROM {location} WHERE id=?",(x,))
-        minute=c.fetchone()
-        c.execute(f"SELECT hour FROM {location} WHERE id=?",(x,))
-        hour=c.fetchone()
-
-        price=database.calculate_amt(x,location)
-        time_label=f"{hour[0]}:{minute[0]}"
-        Label(win,text=f"Entry Time:{time_label}",bg='#70B6AC',width=23,font=('Trebuchet MS',12),fg='black').place(x=40,y=110)
-        Label(win,text=f"Price:{price}",bg='#70B6AC',width=23,font=('Trebuchet MS',12),fg='black').place(x=40,y=135)
-        conn.close()
-
-        submit= Button(win, text="Submit", bg='#CBFDF1', width=15, font=('Trebuchet MS', 10),activebackground="#CBFDF1",command=lambda:[red(button,x,location,win)])
-        submit.place(x=80,y=165)
-        win.mainloop()
-
-    elif status[0]=="TRUE":
-        win=Toplevel()
-        win.geometry("300x300")
-        win.configure(bg='#017A5E')
+    if status[0]=="TRUE":
         Label(win,text="Details",bg='#017A5E',font=('Trebuchet MS',20,'bold'),fg='black').place(x=100,y=10)
         global model_var
         model_var = Entry(win,width=23, fg='black', border=0,bg='#70B6AC', font=('Trebuchet MS', 12),textvariable=StringVar)
+
         def on_enter(e):
             model_var.delete(0, 'end')
         def on_leave(e):
@@ -98,12 +74,9 @@ def check_slot(button,x,location):
                 number_var.insert(0, 'number')
 
         number_var.place(x=30, y=120)
-
         number_var.insert(0, 'number')
         number_var.bind('<FocusIn>', on_enter)
         number_var.bind('<FocusOut>', on_leave)
-
-
         t=datetime.datetime.now()
         year=t.year
         month=t.month
@@ -113,22 +86,34 @@ def check_slot(button,x,location):
         c.execute(f'''UPDATE {location}
                       SET hour=?, minute=?,year=?,month=?,day=?
                       WHERE id=?''',(hour,minute,year,month,day,x))
+        conn.close()
         time=str(hour)+":"+str(minute)
         Label(win,text=f"Entry Time:{time}",bg='#017A5E',font=('Trebuchet MS',12),fg='black').place(x=30,y=150)
-
-        conn.commit()
-        conn.close()
-        Button(win, text="Submit", bg='#CBFDF1', width=15, font=('Trebuchet MS', 10),activebackground="#CBFDF1",command=lambda:[green(button,x,location,win)]).place(x=80, y=180)
+        Button(win, text="Submit", bg='#CBFDF1', width=15, font=('Trebuchet MS', 10),activebackground="#CBFDF1",
+               command=lambda:[green(button,x,location,win)]).place(x=80, y=180)
         win.mainloop()
 
-    elif status[0]=="ADD":
-        button.config(bg="green",text='')
-        c.execute(f'''UPDATE {location}
-                SET status=?
-                WHERE id=? 
-            ''',("TRUE",x))
-        conn.commit()
+    elif status[0]=="FALSE":
+        c.execute(f"SELECT model,number FROM {location} WHERE id=?",(x,))
+        details=c.fetchmany()
+
+        Label(win,text="Details",bg='#017A5E',font=('Trebuchet MS',20,'bold'),fg='black').place(x=100,y=5)
+        Label(win,text=f"Model:{details[0][0]}",bg='#70B6AC',width=23,font=('Trebuchet MS',12),fg='black').place(x=40,y=60)
+        Label(win,text=f"Number:{details[0][1]}",bg='#70B6AC',width=23,font=('Trebuchet MS',12),fg='black').place(x=40,y=85)
+
+        c.execute(f"SELECT minute FROM {location} WHERE id=?",(x,))
+        minute=c.fetchone()
+        c.execute(f"SELECT hour FROM {location} WHERE id=?",(x,))
+        hour=c.fetchone()
         conn.close()
+        price=database.calculate_amt(x,location)
+        time_label=f"{hour[0]}:{minute[0]}"
+        Label(win,text=f"Entry Time:{time_label}",bg='#70B6AC',width=23,font=('Trebuchet MS',12),fg='black').place(x=40,y=110)
+        Label(win,text=f"Price:{price}",bg='#70B6AC',width=23,font=('Trebuchet MS',12),fg='black').place(x=40,y=135)
+        submit= Button(win, text="Submit", bg='#CBFDF1', width=15, font=('Trebuchet MS', 10),activebackground="#CBFDF1"
+                       ,command=lambda:[red(button,x,location,win)])
+        submit.place(x=80,y=165)
+        win.mainloop()
 
 def button_status(button,x,location):
     conn=database.makeconnection()
@@ -172,7 +157,7 @@ def create_button(name_id,root,canvas,canvas_var):
         database.add_slot((len(button_length)+1),name_id)
         create_button(name_id,root,canvas,canvas_var)
     cyan="#70B6AC"
-    Button(text="Add Location",cursor="hand2",bg=cyan,fg="black",font=("Trebuchet MS",10),width=14,command=slot).place(x=1400,y=140)
+    Button(text="Add Slot",cursor="hand2",bg=cyan,fg="black",font=("Trebuchet MS",10),width=14,command=slot).place(x=1400,y=140)
 
     loc = Frame(root,bg=cyan,height=535,width=600)#slider frame
     loc.place(x=850,y=240)
